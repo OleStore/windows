@@ -11,6 +11,7 @@
     <sys:String x:Key="MainWindowsLanguage">Languages:</sys:String>
     <sys:String x:Key="TabItemHeaderAppDeployment">應用佈署</sys:String>
     <sys:String x:Key="TabItemHeaderResourceTools">資源工具</sys:String>
+    <sys:String x:Key="TabItemHeaderFreeWallURL">免翻網址資源</sys:String>
     <sys:String x:Key="TextBlockHostName">主機:</sys:String>
     <sys:String x:Key="TextBoxHostNamePrompt">IP或域名(不可為空)</sys:String>
     <sys:String x:Key="TextBlockHostPart">端口:</sys:String>
@@ -100,8 +101,15 @@
     <sys:String x:Key="ButtonTestAndEnableBBR">啟用BBR</sys:String>
     <sys:String x:Key="ButtonRemoveAllSoft">卸載代理</sys:String>
     <sys:String x:Key="MessageBoxShow_RemoveAllSoft">僅支持卸載由ProxySU安裝的代理軟件及相關配置，請確保重要配置已備份。不支持卸載使用其他方法或腳本安裝的代理。確定要卸載遠程主機上的代理軟件嗎？</sys:String>
+    <sys:String x:Key="MessageBoxShow_EnableRootPassword">本功能需要當前登錄的賬戶具有sudo權限，是否為遠程主機啟用root賬戶並設置密碼？</sys:String>
+    <sys:String x:Key="MessageBoxShow_AlreadyRoot">當前賬戶已經具有root權限，無需再設置！</sys:String>
+    <sys:String x:Key="MessageBoxShow_NoSudoToAccount">當前賬戶無法獲取sudo權限，設置失敗！</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_GenerateRandomPassword">生成20位隨機密碼！</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_EnableRootPasswordSuccess">遠程主機Root賬戶密碼登錄已啟用，密碼保存在隨後打開的文件夾中！</sys:String>
     <sys:String x:Key="DisplayInstallInfo_StartRemoveProxy">開始卸載......</sys:String>
-
+    <sys:String x:Key="DisplayInstallInfo_DiscoverProxySoft">檢測到已安裝</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_RemoveProxySoftFailed">卸載失敗！請向開發者問詢！</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_RemoveProxySoftSuccess">卸載成功！</sys:String>
     <!-- 以下資源工具標籤頁界面 -->
     <sys:String x:Key="ButtonWebBrowserHomePage">主頁</sys:String>
     <sys:String x:Key="ButtonWebBrowserForward">前進</sys:String>
@@ -261,7 +269,11 @@
     <sys:String x:Key="DisplayInstallInfo_TimeError">時間較對失敗......</sys:String>
     <sys:String x:Key="DisplayInstallInfo_TimeOK">時間差符合要求，OK!</sys:String>
     <sys:String x:Key="DisplayInstallInfo_TestDomainResolve">正在檢測域名是否解析到當前VPS的IP上......</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_OnlyIpv6HostDetect">正在檢測是否為純ipv6主機......</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_SetUpNat64">正在設置Nat64網關......</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_DeleteSetUpNat64">正在刪除Nat64網關......</sys:String>
     <sys:String x:Key="DisplayInstallInfo_DomainResolveOK">解析正確！ OK!</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_OnlyIpv6">檢測當前主機為純ipv6主機，目前暫不支持！</sys:String>
     <sys:String x:Key="DisplayInstallInfo_ErrorDomainResolve">域名未能正確解析到當前VPS的IP上!安裝失敗！</sys:String>
     <sys:String x:Key="MessageBoxShow_ErrorDomainResolve">域名未能正確解析到當前VPS的IP上，請檢查！若解析設置正確，請等待生效後再重試安裝。如果域名使用了CDN，請先關閉！</sys:String>
     <sys:String x:Key="DisplayInstallInfo_TestPortUsed">檢測端口占用情況......</sys:String>

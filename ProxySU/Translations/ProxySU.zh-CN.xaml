@@ -11,6 +11,7 @@
     <sys:String x:Key="MainWindowsLanguage">Languages:</sys:String>
     <sys:String x:Key="TabItemHeaderAppDeployment">应用布署</sys:String>
     <sys:String x:Key="TabItemHeaderResourceTools">资源工具</sys:String>
+    <sys:String x:Key="TabItemHeaderFreeWallURL">免翻网址资源</sys:String>
     <sys:String x:Key="TextBlockHostName">主机:</sys:String>
     <sys:String x:Key="TextBoxHostNamePrompt">IP或域名(不可为空)</sys:String>
     <sys:String x:Key="TextBlockHostPart">端口:</sys:String>
@@ -99,7 +100,13 @@
     <sys:String x:Key="ButtonClearOccupiedPorts">释放80/443端口</sys:String>
     <sys:String x:Key="ButtonTestAndEnableBBR">启用BBR</sys:String>
     <sys:String x:Key="ButtonRemoveAllSoft">卸载代理</sys:String>
+    <sys:String x:Key="ButtonEnableRootPassWord">启用Root密码登录</sys:String>
     <sys:String x:Key="MessageBoxShow_RemoveAllSoft">仅支持卸载由ProxySU安装的代理软件及相关配置，请确保重要配置已备份。不支持卸载使用其他方法或脚本安装的代理。确定要卸载远程主机上的代理软件吗？</sys:String>
+    <sys:String x:Key="MessageBoxShow_EnableRootPassword">本功能需要当前登录的账户具有sudo权限，是否为远程主机启用root账户并设置密码？</sys:String>
+    <sys:String x:Key="MessageBoxShow_AlreadyRoot">当前账户已经具有root权限，无需再设置！</sys:String>
+    <sys:String x:Key="MessageBoxShow_NoSudoToAccount">当前账户无法获取sudo权限，设置失败！</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_GenerateRandomPassword">生成20位随机密码！</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_EnableRootPasswordSuccess">远程主机Root账户密码登录已启用，密码保存在随后打开的文件夹中！</sys:String>
     <sys:String x:Key="DisplayInstallInfo_StartRemoveProxy">开始卸载</sys:String>
     <sys:String x:Key="DisplayInstallInfo_DiscoverProxySoft">检测到已安装</sys:String>
     <sys:String x:Key="DisplayInstallInfo_RemoveProxySoftFailed">卸载失败！请向开发者问询！</sys:String>
@@ -268,7 +275,11 @@
     <sys:String x:Key="DisplayInstallInfo_TimeError">时间较对失败......</sys:String>
     <sys:String x:Key="DisplayInstallInfo_TimeOK">时间差符合要求，OK!</sys:String>
     <sys:String x:Key="DisplayInstallInfo_TestDomainResolve">正在检测域名是否解析到当前VPS的IP上......</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_OnlyIpv6HostDetect">正在检测是否为纯ipv6主机......</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_SetUpNat64">正在设置Nat64网关......</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_DeleteSetUpNat64">正在删除Nat64网关......</sys:String>
     <sys:String x:Key="DisplayInstallInfo_DomainResolveOK">解析正确！OK!</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_OnlyIpv6">检测当前主机为纯ipv6主机，目前暂不支持！</sys:String>
     <sys:String x:Key="DisplayInstallInfo_ErrorDomainResolve">域名未能正确解析到当前VPS的IP上!安装失败！</sys:String>
     <sys:String x:Key="MessageBoxShow_ErrorDomainResolve">域名未能正确解析到当前VPS的IP上，请检查！若解析设置正确，请等待生效后再重试安装。如果域名使用了CDN，请先关闭！</sys:String>
     <sys:String x:Key="DisplayInstallInfo_TestPortUsed">检测端口占用情况......</sys:String>

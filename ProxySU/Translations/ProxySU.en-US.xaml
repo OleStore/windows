@@ -11,6 +11,7 @@
     <sys:String x:Key="MainWindowsLanguage">界面語言:</sys:String>
     <sys:String x:Key="TabItemHeaderAppDeployment">Deployment</sys:String>
     <sys:String x:Key="TabItemHeaderResourceTools">Resources</sys:String>
+    <sys:String x:Key="TabItemHeaderFreeWallURL">Free Wall URL</sys:String>
     <sys:String x:Key="TextBlockHostName">Host:</sys:String>
     <sys:String x:Key="TextBoxHostNamePrompt">IP or Domain (Not empty)</sys:String>
     <sys:String x:Key="TextBlockHostPart">Port:</sys:String>
@@ -98,8 +99,15 @@
     <sys:String x:Key="ButtonTestAndEnableBBR">Enable BBR</sys:String>
     <sys:String x:Key="ButtonRemoveAllSoft">Uninstall Proxy</sys:String>
     <sys:String x:Key="MessageBoxShow_RemoveAllSoft">Only the proxy software installed by ProxySU and related configurations are supported. Please make sure that important configurations have been backed up. Uninstalling agents installed using other methods or scripts is not supported. Are you sure you want to uninstall the agent software on the remote host?</sys:String>
+    <sys:String x:Key="MessageBoxShow_EnableRootPassword">This function requires that the currently logged-in account has sudo permissions. Is the root account enabled and password set for the remote host?</sys:String>
+    <sys:String x:Key="MessageBoxShow_AlreadyRoot">The current account already has root privileges, no need to set it up!</sys:String>
+    <sys:String x:Key="MessageBoxShow_NoSudoToAccount">The current account cannot obtain sudo permission, the setting failed!</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_GenerateRandomPassword">Generate a 20-digit random password!</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_EnableRootPasswordSuccess">The remote host Root account password login is enabled, and the password is saved in the folder opened afterwards!</sys:String>
     <sys:String x:Key="DisplayInstallInfo_StartRemoveProxy">Start uninstall......</sys:String>
-
+    <sys:String x:Key="DisplayInstallInfo_DiscoverProxySoft">Detected installed</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_RemoveProxySoftFailed">Uninstallation failed! Please ask the developer!</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_RemoveProxySoftSuccess">Uninstall successfully!</sys:String>
     <!-- The following resource tool tab interface -->
     <sys:String x:Key="ButtonWebBrowserHomePage">Home</sys:String>
     <sys:String x:Key="ButtonWebBrowserForward">Forward</sys:String>
@@ -259,7 +267,11 @@
     <sys:String x:Key="DisplayInstallInfo_TimeError">Time comparison failed...</sys:String>
     <sys:String x:Key="DisplayInstallInfo_TimeOK">The time difference meets the requirements, OK!</sys:String>
     <sys:String x:Key="DisplayInstallInfo_TestDomainResolve">is checking whether the domain name is resolved to the IP of the current VPS...</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_OnlyIpv6HostDetect">is detecting whether it is a pure ipv6 host...</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_SetUpNat64">Nat64 gateway is being set up......</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_DeleteSetUpNat64">Nat64 gateway is being deleted...</sys:String>
     <sys:String x:Key="DisplayInstallInfo_DomainResolveOK">The resolution is correct! OK!</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_OnlyIpv6">detects that the current host is a pure ipv6 host, it is not currently supported!</sys:String>
     <sys:String x:Key="DisplayInstallInfo_ErrorDomainResolve">The domain name could not be correctly resolved to the IP of the current VPS! Installation failed!</sys:String>
     <sys:String x:Key="MessageBoxShow_ErrorDomainResolve">The domain name cannot be correctly resolved to the IP of the current VPS, please check! If the resolution setting is correct, please wait for it to take effect before retrying the installation. If the domain name uses CDN, please close it first!</sys:String>
     <sys:String x:Key="DisplayInstallInfo_TestPortUsed">Detect port occupancy...</sys:String>
