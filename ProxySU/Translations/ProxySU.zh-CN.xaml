@@ -26,6 +26,7 @@
     <sys:String x:Key="RadioButtonProxyNoLogin">不需登录</sys:String>
     <sys:String x:Key="RadiobuttonProxyYesLogin">需要登录</sys:String>
     <sys:String x:Key="TextBlockProxyHost">代理地址:</sys:String>
+    <sys:String x:Key="ButtonSaveInstalledLog">安装日志另存为...</sys:String>
     <sys:String x:Key="TextBlockSetUpProcessing">等待安装布署</sys:String>
     <sys:String x:Key="TabItemHeaderSysTools">系统工具</sys:String>
     <sys:String x:Key="ButtonV2RayTemplateConfiguration">V2Ray模板库</sys:String>
@@ -101,11 +102,22 @@
     <sys:String x:Key="ButtonTestAndEnableBBR">启用BBR</sys:String>
     <sys:String x:Key="ButtonRemoveAllSoft">卸载代理</sys:String>
     <sys:String x:Key="ButtonEnableRootPassWord">启用Root密码登录</sys:String>
+    <sys:String x:Key="ButtonEnableRootCert">启用Root证书密钥登录</sys:String>
+    <sys:String x:Key="ButtonRootProhibitsPasswordLogin">root禁止密码登录</sys:String>
     <sys:String x:Key="MessageBoxShow_RemoveAllSoft">仅支持卸载由ProxySU安装的代理软件及相关配置，请确保重要配置已备份。不支持卸载使用其他方法或脚本安装的代理。确定要卸载远程主机上的代理软件吗？</sys:String>
     <sys:String x:Key="MessageBoxShow_EnableRootPassword">本功能需要当前登录的账户具有sudo权限，是否为远程主机启用root账户并设置密码？</sys:String>
+    <sys:String x:Key="MessageBoxShow_ButtonEnableRootCert">本功能需要当前登录的账户具有root或者sudo权限，是否为远程主机启用root证书密钥登录？</sys:String>
+    <sys:String x:Key="MessageBoxShow_ButtonRootProhibitsPasswordLogin">本功能需要远程主机已经开启了其他登录方式，如密钥方式等，否则将可能造成远程主机无法连接，是否禁止远程主机的root账户密码登录方式？</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_SetRootProhibitsPasswordLogin">正在关闭root账户密码登录方式.....</sys:String>
+    <sys:String x:Key="MessageBoxShow_RootProhibitsPasswordLoginOK">远程主机root账户密码登录方式已关闭！</sys:String>
+    <sys:String x:Key="MessageBoxShow_ButtonEnableRootCertSuccess">远程主机root账户证书密钥登录已启用，密钥文件rootuser.key保存在随后打开的文件夹中！</sys:String>
     <sys:String x:Key="MessageBoxShow_AlreadyRoot">当前账户已经具有root权限，无需再设置！</sys:String>
     <sys:String x:Key="MessageBoxShow_NoSudoToAccount">当前账户无法获取sudo权限，设置失败！</sys:String>
     <sys:String x:Key="DisplayInstallInfo_GenerateRandomPassword">生成20位随机密码！</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_EnableRootPasswordSavePasswordInfo">保存密码信息！</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_EnableRootCertGenerateCert">正在生成密钥......</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_EnableRootCertDownloadCert">正在下载密钥......</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_EnableRootCertSetCertEnable">远程主机启用密钥登录.......</sys:String>
     <sys:String x:Key="DisplayInstallInfo_EnableRootPasswordSuccess">远程主机Root账户密码登录已启用，密码保存在随后打开的文件夹中！</sys:String>
     <sys:String x:Key="DisplayInstallInfo_StartRemoveProxy">开始卸载</sys:String>
     <sys:String x:Key="DisplayInstallInfo_DiscoverProxySoft">检测到已安装</sys:String>
@@ -127,6 +139,9 @@
     <sys:String x:Key="TextBlockTrojanGoPassword">密码:</sys:String>
     <sys:String x:Key="TextBlockTrojanGoPasswordExplain">使用已有密码，直接粘贴到框中</sys:String>
     <sys:String x:Key="TextBlockTrojanGoWebSocketPath">WebSocket路径:</sys:String>
+    <sys:String x:Key="CheckBoxMuxSelect">Mux多路复用</sys:String>
+    <sys:String x:Key="TextBlockExplainCheckBoxMuxSelect">此处设置只对官方客户端配置文件config.json有效，其他客户端需手动设置，服务端自动适配。</sys:String>
+    <sys:String x:Key="TextBlockExplainCheckBoxMuxSelectResult">此字段不出现在QR码及分享URL中，客户端需自行设置，服务端默认启用自动适配。</sys:String>
     <sys:String x:Key="ButtonTrojanGoTemplateOK">确定</sys:String>
     <sys:String x:Key="ButtonTrojanGoTemplateCancel">取消</sys:String>
     <!-- 以下V2Ray模板库界面 -->
@@ -224,10 +239,10 @@
     <sys:String x:Key="TextBlockEncryptionIsAuto">默认auto</sys:String>
     <sys:String x:Key="GrouBoxHeaderUrlOrQR">二维码/URL</sys:String>
     <sys:String x:Key="TextBlockUsedParameter">以上参数可以手动或扫描输入客户端，用于官方客户端的配置和相关文件已经存放入目录下，点击 确定 按扭可打开</sys:String>
-    <sys:String x:Key="TextBlockQrURLexplainV2Ray">二维码和URL链接可用于&#x0a;v2rayN(windows)&#x0a;Trojan-QT5(windows)&#x0a;Qv2ray(windows)&#x0a;Shadowrocket(ios)&#x0a;v2rayNG(Android)&#x0a;导入v2ray节点&#x0a;&#x0a;注意:Vless协议需要手动输入配置参数，二维码和URL无效</sys:String>
-    <sys:String x:Key="TextBlockQrURLexplainTrojan-go">"可用于ShadowRocket (ios)、igniter（Android）、Trojan-QT5 (windows) 扫码和导入url。注意：有的客户端可能不支持WebSocket模式。"</sys:String>
-    <sys:String x:Key="TextBlockQrURLexplainTrojan">"可用于ShadowRocket (ios)、igniter（Android）、Trojan-QT5 (windows) 扫码和导入url。注意：有的客户端可能不支持WebSocket模式。"</sys:String>
-    <sys:String x:Key="TextBlockQrURLexplainNaiveProxy">用于NaiveGUI(windows)的URL导入链接</sys:String>
+    <sys:String x:Key="TextBlockQrURLexplainV2Ray">二维码和URL链接可用于&#x0a;v2rayN(windows)&#x0a;Qv2ray(windows)&#x0a;Qv2ray(windows)&#x0a;Shadowrocket(ios)&#x0a;v2rayNG(Android)&#x0a;导入v2ray节点&#x0a;&#x0a;注意:Vless协议需要手动输入配置参数，二维码和URL无效</sys:String>
+    <sys:String x:Key="TextBlockQrURLexplainTrojan-go">"可用于ShadowRocket (ios)、igniter（Android）、Qv2ray (windows) 扫码和导入url。注意：有的客户端可能不支持WebSocket模式。"</sys:String>
+    <sys:String x:Key="TextBlockQrURLexplainTrojan">"可用于ShadowRocket (ios)、igniter（Android）、Qv2ray (windows) 扫码和导入url。注意：有的客户端可能不支持WebSocket模式。"</sys:String>
+    <sys:String x:Key="TextBlockQrURLexplainNaiveProxy">用于NaiveSharp(windows)的URL导入链接</sys:String>
     <sys:String x:Key="TextBlockQrURLexplainSSR">用于ShadowsocksR(windows)、SSRR(android)、Shadowrocket(ios)的扫码和URL导入链接</sys:String>
     <sys:String x:Key="TextBlockQrURLexplainSSmobile">用于手机客户端shadowsocks(android)、Shadowrocket(ios)的扫码和URL导入链接</sys:String>
     <sys:String x:Key="TextBlockQrURLexplainSSpc">用于电脑客户端Shadowsocks (windows)的扫码和URL导入链接</sys:String>
@@ -276,6 +291,8 @@
     <sys:String x:Key="DisplayInstallInfo_TimeOK">时间差符合要求，OK!</sys:String>
     <sys:String x:Key="DisplayInstallInfo_TestDomainResolve">正在检测域名是否解析到当前VPS的IP上......</sys:String>
     <sys:String x:Key="DisplayInstallInfo_OnlyIpv6HostDetect">正在检测是否为纯ipv6主机......</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_FindFastestSetUpNat64">正在查找最快的Nat64网关......</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_FindFastestNat64AsIs">当前主机最快的Nat64网关为:</sys:String>
     <sys:String x:Key="DisplayInstallInfo_SetUpNat64">正在设置Nat64网关......</sys:String>
     <sys:String x:Key="DisplayInstallInfo_DeleteSetUpNat64">正在删除Nat64网关......</sys:String>
     <sys:String x:Key="DisplayInstallInfo_DomainResolveOK">解析正确！OK!</sys:String>
@@ -294,6 +311,7 @@
     <sys:String x:Key="DisplayInstallInfo_StartInstalling">系统环境检测完毕，符合安装要求,开始布署......</sys:String>
     <sys:String x:Key="DisplayInstallInfo_OpenFireWallPort">开启防火墙相应端口......</sys:String>
     <sys:String x:Key="DisplayInstallInfo_StartInstallSoft">正在安装</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_DownloadScriptFailed">文件下载失败！</sys:String>
     <sys:String x:Key="DisplayInstallInfo_CompilingSS">编译中,请耐心等待.............</sys:String>
     <sys:String x:Key="MessageBoxShow_ErrorInstallSoftFail">安装失败,脚本运行出错！</sys:String>
     <sys:String x:Key="DisplayInstallInfo_SoftInstallSuccess">安装成功！</sys:String>
@@ -333,6 +351,7 @@
     <sys:String x:Key="DisplayInstallInfo_BBRFailed">系统不满足启用BBR的条件，启用失败！</sys:String>
     <sys:String x:Key="DisplayInstallInfo_BBREnabledSuccess">BBR 启用成功！</sys:String>
     <sys:String x:Key="DisplayInstallInfo_GenerateClientConfig">生成客户端配置......</sys:String>
+    <sys:String x:Key="DisplayInstallInfo_GetClientConfigFailed">客户端配置获取失败！</sys:String>
     <sys:String x:Key="DisplayInstallInfo_ProxyInstalledOK">安装成功,祝你玩的愉快！！</sys:String>
     <sys:String x:Key="DisplayInstallInfo_LoginFailed">安装失败!</sys:String>
     <sys:String x:Key="MessageBoxShow_ErrorLoginOccurred">发生错误!</sys:String>
@@ -376,13 +395,13 @@
     <sys:String x:Key="readmeTxtV2RayExplainLine02">v2ray官方网站：https://www.v2ray.com/</sys:String>
     <sys:String x:Key="readmeTxtV2RayExplainLine03">v2ray官方程序下载地址：https://github.com/v2ray/v2ray-core/releases</sys:String>
     <sys:String x:Key="readmeTxtV2RayExplainLine04">下载相应版本，Windows选择v2ray-windows-64.zip或者v2ray-windows-32.zip，解压后提取v2ctl.exe和v2ray.exe。与config.json放在同一目录，运行v2ray.exe即可。</sys:String>
-    <sys:String x:Key="readmeTxtV2RayExplainLine05">此文件为v2rayN、Trojan-QT5、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点</sys:String>
+    <sys:String x:Key="readmeTxtV2RayExplainLine05">此文件为v2rayN(windows)、Qv2ray(windows)、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点</sys:String>
     <sys:String x:Key="readmeTxtV2RayExplainLine06">v2rayN下载网址：https://github.com/2dust/v2rayN/releases</sys:String>
-    <sys:String x:Key="readmeTxtV2RayExplainLine07">Trojan-QT5：https://github.com/Trojan-Qt5/Trojan-Qt5</sys:String>
+    <sys:String x:Key="readmeTxtV2RayExplainLine07">Qv2ray下载网址：https://github.com/Qv2ray/Qv2ray/releases</sys:String>
     <sys:String x:Key="readmeTxtV2RayExplainLine08">v2rayNG(Android)下载网址：https://github.com/2dust/v2rayNG/releases</sys:String>
     <sys:String x:Key="readmeTxtV2RayExplainLine09">v2rayNG(Android)在Google Play下载网址：https://play.google.com/store/apps/details?id=com.v2ray.ang</sys:String>
     <sys:String x:Key="readmeTxtV2RayExplainLine10">Shadowrocket(ios)下载,需要使用国外区的AppleID。请自行谷歌方法。</sys:String>
-    <sys:String x:Key="readmeTxtV2RayExplainLine11">此文件为v2rayN、Trojan-QT5、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址</sys:String>
+    <sys:String x:Key="readmeTxtV2RayExplainLine11">此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址</sys:String>
     <sys:String x:Key="readmeTxtV2RayExplainLine12">服务器通用连接配置参数:</sys:String>
     <!--以下为Trojan-go客户端说明文件-->
     <sys:String x:Key="readmeTxtTrojan-goExplainLine01">此文件为Trojan-go官方程序所使用的客户端配置文件，配置为全局模式，http与socks5地址：127.0.0.1:1080</sys:String>
@@ -400,19 +419,19 @@
     <sys:String x:Key="readmeTxtTrojanExplainLine02">Trojan官方网站：https://trojan-gfw.github.io/trojan/</sys:String>
     <sys:String x:Key="readmeTxtTrojanExplainLine03">Trojan官方程序下载地址：https://github.com/trojan-gfw/trojan/releases</sys:String>
     <sys:String x:Key="readmeTxtTrojanExplainLine04">下载相应版本，Windows选择Trojan-x.xx-win.zip,解压后提取trojan.exe。与config.json放在同一目录，运行trojan.exe即可。</sys:String>
-    <sys:String x:Key="readmeTxtTrojanExplainLine05">此文件为Trojan-QT5 (windows)、igniter（Android）、Shadowrocket(ios)扫码导入节点</sys:String>
-    <sys:String x:Key="readmeTxtTrojanExplainLine06">Trojan-QT5 (windows)下载网址：https://github.com/TheWanderingCoel/Trojan-Qt5/releases</sys:String>
+    <sys:String x:Key="readmeTxtTrojanExplainLine05">此文件为Qv2ray (windows)、igniter（Android）、Shadowrocket(ios)扫码导入节点</sys:String>
+    <sys:String x:Key="readmeTxtTrojanExplainLine06">Qv2ray (windows)下载网址：https://github.com/Qv2ray/Qv2ray/releases</sys:String>
     <sys:String x:Key="readmeTxtTrojanExplainLine07">igniter（Android）下载网址：https://github.com/trojan-gfw/igniter/releases</sys:String>
     <sys:String x:Key="readmeTxtTrojanExplainLine08">Shadowrocket(ios)下载,需要使用国外区的AppleID。请自行谷歌方法。</sys:String>
-    <sys:String x:Key="readmeTxtTrojanExplainLine09">此文件为Trojan-QT5 (windows)、igniter（Android）、Shadowrocket(ios)复制粘贴导入节点的网址</sys:String>
+    <sys:String x:Key="readmeTxtTrojanExplainLine09">此文件为Qv2ray (windows)、igniter（Android）、Shadowrocket(ios)复制粘贴导入节点的网址</sys:String>
     <sys:String x:Key="readmeTxtTrojanExplainLine10">服务器通用连接配置参数</sys:String>
     <!--以下为NaiveProxy客户端说明文件-->
     <sys:String x:Key="readmeTxtNaiveProxyExplainLine01">此文件为NaiveProxy官方程序所使用的客户端配置文件，配置为全局模式，socks5地址：127.0.0.1:1080</sys:String>
     <sys:String x:Key="readmeTxtNaiveProxyExplainLine02">NaiveProxy官方网站：https://github.com/klzgrad/naiveproxy</sys:String>
     <sys:String x:Key="readmeTxtNaiveProxyExplainLine03">NaiveProxy官方程序下载地址：https://github.com/klzgrad/naiveproxy/releases</sys:String>
     <sys:String x:Key="readmeTxtNaiveProxyExplainLine04">下载相应版本，Windows选择naiveproxy-x.xx-win.zip,解压后提取naive.exe。与config.json放在同一目录，运行naive.exe即可。</sys:String>
-    <sys:String x:Key="readmeTxtNaiveProxyExplainLine05">此文件为NaiveGUI(windows)复制粘贴导入节点的网址</sys:String>
-    <sys:String x:Key="readmeTxtNaiveProxyExplainLine06">NaiveGUI(windows)下载网址：https://github.com/ExcitedCodes/NaiveGUI/releases</sys:String>
+    <sys:String x:Key="readmeTxtNaiveProxyExplainLine05">此文件为NaiveSharp(windows)复制粘贴导入节点的网址</sys:String>
+    <sys:String x:Key="readmeTxtNaiveProxyExplainLine06">NaiveSharp(windows)下载网址：https://github.com/KevinZonda/NaiveSharp/releases</sys:String>
     <sys:String x:Key="readmeTxtNaiveProxyExplainLine07">服务器通用连接配置参数</sys:String>
     <!--以下为SSR+TLS+Caddy客户端说明文件-->
     <sys:String x:Key="readmeTxtSSRExplainLine05">此文件为ShadowsocksR (windows)、SSRR（Android）、Shadowrocket(ios)扫码导入节点</sys:String>

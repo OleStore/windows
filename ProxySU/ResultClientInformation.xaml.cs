@@ -232,6 +232,13 @@ namespace ProxySU
                     }
                     else if (MainWindow.ReceiveConfigurationParameters[0].Contains("mKCP") == true)
                     {
+                        if(MainWindow.mKCPvlessIsSet == true)
+                        {
+                            TextBlockVmessOrVless.Text = Application.Current.FindResource("TabItemHeaderV2RayVlessProtocol").ToString();
+                            TextBoxEncryption.Text = "none";
+                            HideAlterId();
+                            HideGroupBoxClientQRandURL();
+                        }
                         if (String.Equals(MainWindow.ReceiveConfigurationParameters[0], "mKCPNone") == true)
                         {
                             TextBoxCamouflageType.Text = "none";
@@ -355,7 +362,11 @@ namespace ProxySU
                 TextBlockTrojanGoWebSocketPath.Visibility = Visibility.Hidden;
                 TextBlockTrojanGoCaption.Visibility = Visibility.Hidden;
 
-                //******"可用于ShadowRocket (ios)、igniter（Android）、Trojan-QT5 (windows) 扫码和导入url。注意：有的客户端可能不支持WebSocket模式。" ******
+                TextBlockMuxSelect.Visibility = Visibility.Hidden;
+                GridMuxSelect.Visibility = Visibility.Hidden;
+                TextBlockExplainCheckBoxMuxSelectResult.Visibility = Visibility.Hidden;
+
+                //******"可用于ShadowRocket (ios)、igniter（Android）、Qv2ray (windows) 扫码和导入url。注意：有的客户端可能不支持WebSocket模式。" ******
                 TextBlockQrURLexplain.Text = Application.Current.FindResource("TextBlockQrURLexplainTrojan-go").ToString();
 
                 //主机地址
@@ -375,6 +386,14 @@ namespace ProxySU
                     TextBlockTrojanGoWebSocketPath.Visibility = Visibility.Visible;
                     TextBlockTrojanGoCaption.Visibility = Visibility.Visible;
 
+                }
+                if(String.Equals(MainWindow.ReceiveConfigurationParameters[9],"true") == true)
+                {
+                    TextBoxConcurrency.Text = MainWindow.ReceiveConfigurationParameters[3];
+                    TextBoxIdle_timeout.Text = MainWindow.ReceiveConfigurationParameters[5];
+                    TextBlockMuxSelect.Visibility = Visibility.Visible;
+                    GridMuxSelect.Visibility = Visibility.Visible;
+                    TextBlockExplainCheckBoxMuxSelectResult.Visibility = Visibility.Visible;
                 }
                 CheckDir("trojan-go_config");
                 GenerateTrojanGoShareQRcodeAndBase64Url();
@@ -574,25 +593,31 @@ namespace ProxySU
                 configDomainSavePath = CreateConfigSaveDir(proxyfolder, MainWindow.ReceiveConfigurationParameters[4]);
                 string configSavePath = configDomainSavePath;
 
-                //string mtprotoJsonPath = @"mtproto_config\mtproto_info.json";
-                //using (StreamReader readerJson = File.OpenText(mtprotoJsonPath))
-                //{
-                //JObject jObjectJson = (JObject)JToken.ReadFrom(new JsonTextReader(readerJson));
-
+                RadioButtonMtgIpv4.IsChecked = true;
+                //MessageBox.Show(MainWindow.ReceiveConfigurationParameters[9]);
                 JObject jObjectJson = JObject.Parse(MainWindow.ReceiveConfigurationParameters[9]);
-
-                TextBoxURLMtgTgIpv4.Text = jObjectJson["ipv4"]["tg_url"].ToString();
-                ImageShareQRcodeMtgTgIpv4.Source = CreateQRCode(TextBoxURLMtgTgIpv4.Text, $"{configSavePath}\\QRIpv4Tg.bmp");
-                using (StreamWriter sw = new StreamWriter($"{configSavePath}\\urlIpv4Tg.txt"))
+                //MessageBox.Show(jObjectJson.ToString());
+                if (jObjectJson["ipv4"]["tg_url"].ToString().Contains("nil") == false)
                 {
-                    sw.WriteLine(TextBoxURLMtgTgIpv4.Text);
+                    RadioButtonMtgIpv4.Visibility = Visibility.Visible;
+                    TextBoxURLMtgTgIpv4.Text = jObjectJson["ipv4"]["tg_url"].ToString();
+                    ImageShareQRcodeMtgTgIpv4.Source = CreateQRCode(TextBoxURLMtgTgIpv4.Text, $"{configSavePath}\\QRIpv4Tg.bmp");
+                    using (StreamWriter sw = new StreamWriter($"{configSavePath}\\urlIpv4Tg.txt"))
+                    {
+                        sw.WriteLine(TextBoxURLMtgTgIpv4.Text);
+                    }
+
+                    TextBoxURLMtgTmeIpv4.Text = jObjectJson["ipv4"]["tme_url"].ToString();
+                    ImageShareQRcodeMtgTmeIpv4.Source = CreateQRCode(TextBoxURLMtgTmeIpv4.Text, $"{configSavePath}\\QRIpv4Tme.bmp");
+                    using (StreamWriter sw = new StreamWriter($"{configSavePath}\\urlIpv4Tme.txt"))
+                    {
+                        sw.WriteLine(TextBoxURLMtgTmeIpv4.Text);
+                    }
+                    RadioButtonMtgIpv4.IsChecked = true;
                 }
-
-                TextBoxURLMtgTmeIpv4.Text = jObjectJson["ipv4"]["tme_url"].ToString();
-                ImageShareQRcodeMtgTmeIpv4.Source = CreateQRCode(TextBoxURLMtgTmeIpv4.Text, $"{configSavePath}\\QRIpv4Tme.bmp");
-                using (StreamWriter sw = new StreamWriter($"{configSavePath}\\urlIpv4Tme.txt"))
+                else
                 {
-                    sw.WriteLine(TextBoxURLMtgTmeIpv4.Text);
+                    RadioButtonMtgIpv4.Visibility = Visibility.Collapsed;
                 }
 
                 if (jObjectJson["ipv6"]["tg_url"].ToString().Contains("nil") == false)
@@ -611,24 +636,19 @@ namespace ProxySU
                     {
                         sw.WriteLine(TextBoxURLMtgTmeIpv6.Text);
                     }
+                    RadioButtonMtgIpv6.IsChecked = true;
                 }
                 else
                 {
                     RadioButtonMtgIpv6.Visibility = Visibility.Collapsed;
                 }
-                RadioButtonMtgIpv4.IsChecked = true;
+                
 
                 using (StreamWriter sw = new StreamWriter($"{configSavePath}\\mtproto_info.json"))
                 {
                     sw.Write(MainWindow.ReceiveConfigurationParameters[9].ToString());
                 }
 
-                //}
-                //if (File.Exists(@"mtproto_config\mtproto_info.json"))
-                //{
-                //    File.Move(@"mtproto_config\mtproto_info.json", $"{configSavePath}\\mtproto_info.json");
-                //    //File.Delete(@"config\config.json");//删除该文件
-                //}
             }
         }
 
@@ -968,7 +988,8 @@ namespace ProxySU
             if (String.Equals(MainWindow.ReceiveConfigurationParameters[0], "VlessXtlsTcp") == false
                 && String.Equals(MainWindow.ReceiveConfigurationParameters[0], "VlessTcpTlsWeb") == false
                 && String.Equals(MainWindow.ReceiveConfigurationParameters[0], "VlessWebSocketTlsWeb") == false
-                && String.Equals(MainWindow.ReceiveConfigurationParameters[0], "VlessHttp2Web") == false)
+                && String.Equals(MainWindow.ReceiveConfigurationParameters[0], "VlessHttp2Web") == false
+                && MainWindow.mKCPvlessIsSet == false)
             {
                 using (StreamWriter sw = new StreamWriter($"{configSavePath}\\url.txt"))
                 {
@@ -985,49 +1006,50 @@ namespace ProxySU
 
             using (StreamWriter sw = new StreamWriter($"{configSavePath}\\readme.txt"))
             {
-                sw.WriteLine("config.json");
-                //****** "此文件为v2ray官方程序所使用的客户端配置文件，配置为全局模式，socks5地址：127.0.0.1:1080，http代理地址：127.0.0.1:1081" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine01").ToString());
+                ReadmeTxtWriteGenerate(sw);
+                //sw.WriteLine("config.json");
+                ////****** "此文件为v2ray官方程序所使用的客户端配置文件，配置为全局模式，socks5地址：127.0.0.1:1080，http代理地址：127.0.0.1:1081" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine01").ToString());
 
-                //****** "v2ray官方网站：https://www.v2ray.com/" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine02").ToString());
+                ////****** "v2ray官方网站：https://www.v2ray.com/" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine02").ToString());
 
-                //****** "v2ray官方程序下载地址：https://github.com/v2ray/v2ray-core/releases" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine03").ToString());
+                ////****** "v2ray官方程序下载地址：https://github.com/v2ray/v2ray-core/releases" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine03").ToString());
 
-                //****** "下载相应版本，Windows选择v2ray-windows-64.zip或者v2ray-windows-32.zip，解压后提取v2ctl.exe和v2ray.exe。与config.json放在同一目录，运行v2ray.exe即可。" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine04").ToString());
+                ////****** "下载相应版本，Windows选择v2ray-windows-64.zip或者v2ray-windows-32.zip，解压后提取v2ctl.exe和v2ray.exe。与config.json放在同一目录，运行v2ray.exe即可。" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine04").ToString());
 
-                sw.WriteLine("-----------------------------------------");
-                sw.WriteLine("QR.bmp");
+                //sw.WriteLine("-----------------------------------------");
+                //sw.WriteLine("QR.bmp");
 
-                //****** "此文件为v2rayN、Trojan-QT5、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine05").ToString());
+                ////****** "此文件为v2rayN(windows)、Qv2ray(windows)、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine05").ToString());
 
-                //****** "v2rayN下载网址：https://github.com/2dust/v2rayN/releases" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine06").ToString());
+                ////****** "v2rayN下载网址：https://github.com/2dust/v2rayN/releases" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine06").ToString());
 
-                //****** "Trojan-QT5：https://github.com/Trojan-Qt5/Trojan-Qt5" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine07").ToString());
+                ////****** "Qv2ray下载网址：https://github.com/Qv2ray/Qv2ray/releases" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine07").ToString());
                 
-                //****** "v2rayNG(Android)下载网址：https://github.com/2dust/v2rayNG/releases" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine08").ToString());
+                ////****** "v2rayNG(Android)下载网址：https://github.com/2dust/v2rayNG/releases" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine08").ToString());
 
-                //****** "v2rayNG(Android)在Google Play下载网址：https://play.google.com/store/apps/details?id=com.v2ray.ang" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine09").ToString());
+                ////****** "v2rayNG(Android)在Google Play下载网址：https://play.google.com/store/apps/details?id=com.v2ray.ang" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine09").ToString());
 
-                //****** "Shadowrocket(ios)下载,需要使用国外区的AppleID。请自行谷歌方法。" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine10").ToString());
+                ////****** "Shadowrocket(ios)下载,需要使用国外区的AppleID。请自行谷歌方法。" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine10").ToString());
 
-                sw.WriteLine("-----------------------------------------");
-                sw.WriteLine("url.txt");
+                //sw.WriteLine("-----------------------------------------");
+                //sw.WriteLine("url.txt");
 
-                //****** "此文件为v2rayN、Trojan-QT5、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine11").ToString());
+                ////****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine11").ToString());
 
-                //写入通用配置参数
-                TxtWriteGeneralParameters(sw);
-}
+                ////写入通用配置参数
+                //TxtWriteGeneralParameters(sw);
+            }
         }
 
         #region VLESS VMESS XTLS WS共存方案生成链接与说明文件
@@ -1140,13 +1162,13 @@ namespace ProxySU
                 sw.WriteLine("-----------------------------------------");
                 //sw.WriteLine("QR.bmp");
 
-                //****** "此文件为v2rayN、Trojan-QT5、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
+                //****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
                 //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine05").ToString());
 
                 //****** "v2rayN下载网址：https://github.com/2dust/v2rayN/releases" ******
                 //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine06").ToString());
 
-                //****** "Trojan-QT5：https://github.com/Trojan-Qt5/Trojan-Qt5" ******
+                //****** "Qv2ray：https://github.com/Qv2ray/Qv2ray/releases" ******
                 //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine07").ToString());
 
                 //****** "v2rayNG(Android)下载网址：https://github.com/2dust/v2rayNG/releases" ******
@@ -1161,7 +1183,7 @@ namespace ProxySU
                 //sw.WriteLine("-----------------------------------------");
                 //sw.WriteLine("url.txt");
 
-                //****** "此文件为v2rayN、Trojan-QT5、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" ******
+                //****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" ******
                 //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine11").ToString());
                 
                 //写入通用配置参数
@@ -1278,13 +1300,13 @@ namespace ProxySU
                 //sw.WriteLine("-----------------------------------------");
                 //sw.WriteLine("QR.bmp");
 
-                //****** "此文件为v2rayN、Trojan-QT5、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
+                //****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
                 //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine05").ToString());
 
                 //****** "v2rayN下载网址：https://github.com/2dust/v2rayN/releases" ******
                 sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine06").ToString());
 
-                //****** "Trojan-QT5：https://github.com/Trojan-Qt5/Trojan-Qt5" ******
+                //****** "Qv2ray：https://github.com/Qv2ray/Qv2ray/releases" ******
                 sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine07").ToString());
 
                 //****** "v2rayNG(Android)下载网址：https://github.com/2dust/v2rayNG/releases" ******
@@ -1299,7 +1321,7 @@ namespace ProxySU
                 //sw.WriteLine("-----------------------------------------");
                 //sw.WriteLine("url.txt");
 
-                //****** "此文件为v2rayN、Trojan-QT5、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" ******
+                //****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" ******
                 //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine11").ToString());
 
                 //写入通用配置参数--
@@ -1417,13 +1439,13 @@ namespace ProxySU
                 //sw.WriteLine("-----------------------------------------");
                 //sw.WriteLine("QR.bmp");
 
-                //****** "此文件为v2rayN、Trojan-QT5、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
+                //****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
                 //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine05").ToString());
 
                 //****** "v2rayN下载网址：https://github.com/2dust/v2rayN/releases" ******
                 sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine06").ToString());
 
-                //****** "Trojan-QT5：https://github.com/Trojan-Qt5/Trojan-Qt5" ******
+                //****** "Qv2ray：https://github.com/Qv2ray/Qv2ray/releases" ******
                 sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine07").ToString());
 
                 //****** "v2rayNG(Android)下载网址：https://github.com/2dust/v2rayNG/releases" ******
@@ -1438,7 +1460,7 @@ namespace ProxySU
                 //sw.WriteLine("-----------------------------------------");
                 //sw.WriteLine("url.txt");
 
-                //****** "此文件为v2rayN、Trojan-QT5、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" ******
+                //****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" ******
                 //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine11").ToString());
 
                 //写入通用配置参数--
@@ -1556,13 +1578,13 @@ namespace ProxySU
                 //sw.WriteLine("-----------------------------------------");
                 //sw.WriteLine("QR.bmp");
 
-                //****** "此文件为v2rayN、Trojan-QT5、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
+                //****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
                 //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine05").ToString());
 
                 //****** "v2rayN下载网址：https://github.com/2dust/v2rayN/releases" ******
                 sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine06").ToString());
 
-                //****** "Trojan-QT5：https://github.com/Trojan-Qt5/Trojan-Qt5" ******
+                //****** "Qv2ray：https://github.com/Qv2ray/Qv2ray/releases" ******
                 sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine07").ToString());
 
                 //****** "v2rayNG(Android)下载网址：https://github.com/2dust/v2rayNG/releases" ******
@@ -1577,7 +1599,7 @@ namespace ProxySU
                 //sw.WriteLine("-----------------------------------------");
                 //sw.WriteLine("url.txt");
 
-                //****** "此文件为v2rayN、Trojan-QT5、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" ******
+                //****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" ******
                 //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine11").ToString());
 
                 //写入通用配置参数--
@@ -1664,49 +1686,50 @@ namespace ProxySU
 
             using (StreamWriter sw = new StreamWriter($"{configSavePath}\\readme.txt"))
             {
-                sw.WriteLine("config.json");
-                //****** "此文件为v2ray官方程序所使用的客户端配置文件，配置为全局模式，socks5地址：127.0.0.1:1080，http代理地址：127.0.0.1:1081" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine01").ToString());
+                ReadmeTxtWriteGenerate(sw);
+                //sw.WriteLine("config.json");
+                ////****** "此文件为v2ray官方程序所使用的客户端配置文件，配置为全局模式，socks5地址：127.0.0.1:1080，http代理地址：127.0.0.1:1081" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine01").ToString());
 
-                //****** "v2ray官方网站：https://www.v2ray.com/" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine02").ToString());
+                ////****** "v2ray官方网站：https://www.v2ray.com/" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine02").ToString());
 
-                //****** "v2ray官方程序下载地址：https://github.com/v2ray/v2ray-core/releases" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine03").ToString());
+                ////****** "v2ray官方程序下载地址：https://github.com/v2ray/v2ray-core/releases" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine03").ToString());
 
-                //****** "下载相应版本，Windows选择v2ray-windows-64.zip或者v2ray-windows-32.zip，解压后提取v2ctl.exe和v2ray.exe。与config.json放在同一目录，运行v2ray.exe即可。" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine04").ToString());
+                ////****** "下载相应版本，Windows选择v2ray-windows-64.zip或者v2ray-windows-32.zip，解压后提取v2ctl.exe和v2ray.exe。与config.json放在同一目录，运行v2ray.exe即可。" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine04").ToString());
 
-                sw.WriteLine("-----------------------------------------");
-                sw.WriteLine("QR.bmp");
+                //sw.WriteLine("-----------------------------------------");
+                //sw.WriteLine("QR.bmp");
 
-                //******"此文件为v2rayN、Trojan-QT5、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" * *****
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine05").ToString());
+                ////******"此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" * *****
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine05").ToString());
 
-                //****** "v2rayN下载网址：https://github.com/2dust/v2rayN/releases" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine06").ToString());
+                ////****** "v2rayN下载网址：https://github.com/2dust/v2rayN/releases" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine06").ToString());
 
-                //****** "Trojan-QT5：https://github.com/Trojan-Qt5/Trojan-Qt5" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine07").ToString());
+                ////****** "Qv2ray：https://github.com/Qv2ray/Qv2ray/releases" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine07").ToString());
 
-                //****** "v2rayNG(Android)下载网址：https://github.com/2dust/v2rayNG/releases" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine08").ToString());
+                ////****** "v2rayNG(Android)下载网址：https://github.com/2dust/v2rayNG/releases" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine08").ToString());
 
-                //****** "v2rayNG(Android)在Google Play下载网址：https://play.google.com/store/apps/details?id=com.v2ray.ang" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine09").ToString());
+                ////****** "v2rayNG(Android)在Google Play下载网址：https://play.google.com/store/apps/details?id=com.v2ray.ang" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine09").ToString());
 
-                //****** "Shadowrocket(ios)下载,需要使用国外区的AppleID。请自行谷歌方法。" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine10").ToString());
+                ////****** "Shadowrocket(ios)下载,需要使用国外区的AppleID。请自行谷歌方法。" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine10").ToString());
 
-                sw.WriteLine("-----------------------------------------");
-                sw.WriteLine("url.txt");
+                //sw.WriteLine("-----------------------------------------");
+                //sw.WriteLine("url.txt");
 
-                //******"此文件为v2rayN、Trojan-QT5、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" * *****
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine11").ToString());
+                ////******"此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" * *****
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine11").ToString());
 
-                //写入通用配置参数--
-                TxtWriteGeneralParameters(sw);
-                
+                ////写入通用配置参数--
+                //TxtWriteGeneralParameters(sw);
+
             }
         }
 
@@ -1791,52 +1814,99 @@ namespace ProxySU
 
             using (StreamWriter sw = new StreamWriter($"{configSavePath}\\readme.txt"))
             {
-                sw.WriteLine("config.json");
-                //****** "此文件为v2ray官方程序所使用的客户端配置文件，配置为全局模式，socks5地址：127.0.0.1:1080，http代理地址：127.0.0.1:1081" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine01").ToString());
+                ReadmeTxtWriteGenerate(sw);
+                //sw.WriteLine("config.json");
+                ////****** "此文件为v2ray官方程序所使用的客户端配置文件，配置为全局模式，socks5地址：127.0.0.1:1080，http代理地址：127.0.0.1:1081" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine01").ToString());
 
-                //****** "v2ray官方网站：https://www.v2ray.com/" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine02").ToString());
+                ////****** "v2ray官方网站：https://www.v2ray.com/" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine02").ToString());
 
-                //****** "v2ray官方程序下载地址：https://github.com/v2ray/v2ray-core/releases" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine03").ToString());
+                ////****** "v2ray官方程序下载地址：https://github.com/v2ray/v2ray-core/releases" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine03").ToString());
 
-                //****** "下载相应版本，Windows选择v2ray-windows-64.zip或者v2ray-windows-32.zip，解压后提取v2ctl.exe和v2ray.exe。与config.json放在同一目录，运行v2ray.exe即可。" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine04").ToString());
+                ////****** "下载相应版本，Windows选择v2ray-windows-64.zip或者v2ray-windows-32.zip，解压后提取v2ctl.exe和v2ray.exe。与config.json放在同一目录，运行v2ray.exe即可。" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine04").ToString());
 
-                sw.WriteLine("-----------------------------------------");
-                sw.WriteLine("QR.bmp");
+                //sw.WriteLine("-----------------------------------------");
+                //sw.WriteLine("QR.bmp");
 
-                //****** "此文件为v2rayN、Trojan-QT5、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine05").ToString());
+                ////****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine05").ToString());
 
-                //****** "v2rayN下载网址：https://github.com/2dust/v2rayN/releases" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine06").ToString());
+                ////****** "v2rayN下载网址：https://github.com/2dust/v2rayN/releases" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine06").ToString());
 
-                //****** "Trojan-QT5：https://github.com/Trojan-Qt5/Trojan-Qt5" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine07").ToString());
+                ////****** "Qv2ray：https://github.com/Qv2ray/Qv2ray/releases" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine07").ToString());
 
-                //****** "v2rayNG(Android)下载网址：https://github.com/2dust/v2rayNG/releases" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine08").ToString());
+                ////****** "v2rayNG(Android)下载网址：https://github.com/2dust/v2rayNG/releases" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine08").ToString());
 
-                //****** "v2rayNG(Android)在Google Play下载网址：https://play.google.com/store/apps/details?id=com.v2ray.ang" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine09").ToString());
+                ////****** "v2rayNG(Android)在Google Play下载网址：https://play.google.com/store/apps/details?id=com.v2ray.ang" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine09").ToString());
 
-                //****** "Shadowrocket(ios)下载,需要使用国外区的AppleID。请自行谷歌方法。" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine10").ToString());
+                ////****** "Shadowrocket(ios)下载,需要使用国外区的AppleID。请自行谷歌方法。" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine10").ToString());
 
-                sw.WriteLine("-----------------------------------------");
-                sw.WriteLine("url.txt");
+                //sw.WriteLine("-----------------------------------------");
+                //sw.WriteLine("url.txt");
 
-                //****** "此文件为v2rayN、Trojan-QT5、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine11").ToString());
+                ////****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine11").ToString());
 
-                //写入通用配置参数--
-                TxtWriteGeneralParameters(sw);
+                ////写入通用配置参数--
+                //TxtWriteGeneralParameters(sw);
 
             }
         }
 
+        //写入VMESS的readme.txt文件
+        private void ReadmeTxtWriteGenerate(StreamWriter sw)
+        {
+            sw.WriteLine("config.json");
+            //****** "此文件为v2ray官方程序所使用的客户端配置文件，配置为全局模式，socks5地址：127.0.0.1:1080，http代理地址：127.0.0.1:1081" ******
+            sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine01").ToString());
+
+            //****** "v2ray官方网站：https://www.v2ray.com/" ******
+            sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine02").ToString());
+
+            //****** "v2ray官方程序下载地址：https://github.com/v2ray/v2ray-core/releases" ******
+            sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine03").ToString());
+
+            //****** "下载相应版本，Windows选择v2ray-windows-64.zip或者v2ray-windows-32.zip，解压后提取v2ctl.exe和v2ray.exe。与config.json放在同一目录，运行v2ray.exe即可。" ******
+            sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine04").ToString());
+
+            sw.WriteLine("-----------------------------------------");
+            sw.WriteLine("QR.bmp");
+
+            //****** "此文件为v2rayN(windows)、Qv2ray(windows)、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
+            sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine05").ToString());
+
+            //****** "v2rayN下载网址：https://github.com/2dust/v2rayN/releases" ******
+            sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine06").ToString());
+
+            //****** "Qv2ray下载网址：https://github.com/Qv2ray/Qv2ray/releases" ******
+            sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine07").ToString());
+
+            //****** "v2rayNG(Android)下载网址：https://github.com/2dust/v2rayNG/releases" ******
+            sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine08").ToString());
+
+            //****** "v2rayNG(Android)在Google Play下载网址：https://play.google.com/store/apps/details?id=com.v2ray.ang" ******
+            sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine09").ToString());
+
+            //****** "Shadowrocket(ios)下载,需要使用国外区的AppleID。请自行谷歌方法。" ******
+            sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine10").ToString());
+
+            sw.WriteLine("-----------------------------------------");
+            sw.WriteLine("url.txt");
+
+            //****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" ******
+            sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine11").ToString());
+
+            //写入通用配置参数
+            TxtWriteGeneralParameters(sw);
+        }
         //TXT文件中写入通用配置参数---
         private void TxtWriteGeneralParameters(StreamWriter sw,bool alterId = true)
         {
@@ -2006,7 +2076,7 @@ namespace ProxySU
                 //sw.WriteLine(Application.Current.FindResource("TextBlockTrojanGoPassword").ToString() + $"{TextBoxTrojanGoServerPassword.Text}");
                 //strApplicat = "TextBlockTrojanGoPassword";
                 strParam = TextBoxTrojanGoType.Text;
-                sw.WriteLine(AlignmentStrFunc("Type", strLenth) + strParam);
+                sw.WriteLine(AlignmentStrFunc("Type:", strLenth) + strParam);
                 //sw.WriteLine(AlignmentStrFunc(Application.Current.FindResource($"{strApplicat}").ToString(), strLenth) + strParam);
 
                 //****** WebSocket路径: ******
@@ -2014,6 +2084,24 @@ namespace ProxySU
                 strApplicat = "TextBlockTrojanGoWebSocketPath";
                 strParam = TextBoxTrojanGoWSPath.Text;
                 sw.WriteLine(AlignmentStrFunc(Application.Current.FindResource($"{strApplicat}").ToString(), strLenth) + strParam);
+
+                //****** Mux多路复用 ******
+                //sw.WriteLine(Application.Current.FindResource("TextBlockTrojanGoWebSocketPath").ToString() + $"{TextBoxTrojanGoWSPath.Text}");
+                strApplicat = "CheckBoxMuxSelect";
+                strParam = ":";
+                sw.WriteLine(AlignmentStrFunc(Application.Current.FindResource($"{strApplicat}").ToString(), strLenth) + strParam);
+
+                //****** concurrency: ******
+                //sw.WriteLine(Application.Current.FindResource("TextBlockTrojanGoWebSocketPath").ToString() + $"{TextBoxTrojanGoWSPath.Text}");
+                strApplicat = "concurrency:";
+                strParam = TextBoxConcurrency.Text;
+                sw.WriteLine(AlignmentStrFunc(strApplicat, strLenth) + strParam);
+
+                //****** idle_timeout: ******
+                //sw.WriteLine(Application.Current.FindResource("TextBlockTrojanGoWebSocketPath").ToString() + $"{TextBoxTrojanGoWSPath.Text}");
+                strApplicat = "idle_timeout:";
+                strParam = TextBoxIdle_timeout.Text;
+                sw.WriteLine(AlignmentStrFunc(strApplicat, strLenth) + strParam);
 
             }
 
@@ -2041,6 +2129,15 @@ namespace ProxySU
         private void TextBoxTrojanGoWSPath_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             CopyToClipboard(TextBoxTrojanGoWSPath.Text);
+        }
+        private void TextBoxConcurrency_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            CopyToClipboard(TextBoxConcurrency.Text);
+        }
+
+        private void TextBoxIdle_timeout_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            CopyToClipboard(TextBoxIdle_timeout.Text);
         }
         #endregion
 
@@ -2146,10 +2243,10 @@ namespace ProxySU
                 sw.WriteLine("-----------------------------------------\n");
                 sw.WriteLine("QR.bmp");
 
-                //sw.WriteLine("此文件为Trojan-QT5 (windows)、igniter（Android）、Shadowrocket(ios)扫码导入节点");
+                //sw.WriteLine("此文件为Qv2ray (windows)、igniter（Android）、Shadowrocket(ios)扫码导入节点");
                 sw.WriteLine(Application.Current.FindResource("readmeTxtTrojanExplainLine05").ToString());
 
-                //sw.WriteLine("Trojan-QT5 (windows)下载网址：https://github.com/TheWanderingCoel/Trojan-Qt5/releases");
+                //sw.WriteLine("Qv2ray (windows)下载网址：https://github.com/Qv2ray/Qv2ray/releases");
                 sw.WriteLine(Application.Current.FindResource("readmeTxtTrojanExplainLine06").ToString());
 
                 //sw.WriteLine("igniter（Android）下载网址：https://github.com/trojan-gfw/igniter/releases");
@@ -2160,7 +2257,7 @@ namespace ProxySU
                 sw.WriteLine("-----------------------------------------\n");
                 sw.WriteLine("url.txt");
 
-                //sw.WriteLine("此文件为Trojan-QT5 (windows)、igniter（Android）、Shadowrocket(ios)复制粘贴导入节点的网址");
+                //sw.WriteLine("此文件为Qv2ray (windows)、igniter（Android）、Shadowrocket(ios)复制粘贴导入节点的网址");
                 sw.WriteLine(Application.Current.FindResource("readmeTxtTrojanExplainLine09").ToString());
                 sw.WriteLine("-----------------------------------------\n");
 
@@ -2222,26 +2319,15 @@ namespace ProxySU
             configDomainSavePath = CreateConfigSaveDir(proxyfolder, TextBoxNaiveServerHost.Text);
             string configSavePath = configDomainSavePath;
 
-            //string saveFileFolderFirst = TextBoxNaiveServerHost.Text;
-            //int num = 1;
-            //saveFileFolder = saveFileFolderFirst;
-            //CheckDir("naive_config");
-            //while (Directory.Exists(@"naive_config\" + saveFileFolder))
-            //{
-            //    saveFileFolder = saveFileFolderFirst + "_copy_" + num.ToString();
-            //    num++;
-            //}
-            //CheckDir(@"naive_config\" + saveFileFolder);
-            string naiveUrl = $"https://{TextBoxNaiveUser.Text}:{TextBoxNaivePassword.Text}@{TextBoxNaiveServerHost.Text}:443/?name={TextBoxNaiveServerHost.Text}&extra_headers=";
-            //MessageBox.Show(v2rayNjsonObject.ToString());
-            //string trojanUrl = "trojan://" + ToBase64Encode(v2rayNjsonObject.ToString());
+            string naiveUrl = $"naive+https://{TextBoxNaiveUser.Text}:{TextBoxNaivePassword.Text}@{TextBoxNaiveServerHost.Text}:443?padding=true#{TextBoxNaiveServerHost.Text}";
+
             TextBoxURL.Text = naiveUrl;
             using (StreamWriter sw = new StreamWriter($"{configSavePath}\\url.txt"))
             {
                 sw.WriteLine(naiveUrl);
 
             }
-            //CreateQRCode(trojanUrl);
+            ImageShareQRcode.Source = CreateQRCode(naiveUrl, $"{configSavePath}\\QR.bmp");
 
             //移动NaiveProxy官方程序配置文件到相应目录
             if (File.Exists(@"naive_config\config.json"))
@@ -2266,14 +2352,23 @@ namespace ProxySU
                 //sw.WriteLine("下载相应版本，Windows选择naiveproxy-x.xx-win.zip,解压后提取naive.exe。与config.json放在同一目录，运行naive.exe即可。");
                 sw.WriteLine(Application.Current.FindResource("readmeTxtNaiveProxyExplainLine04").ToString());
 
+                sw.WriteLine("-----------------------------------------");
+                sw.WriteLine("QR.bmp");
+
+                //sw.WriteLine("此文件为NaiveSharp(windows)复制粘贴导入节点的网址");
+                sw.WriteLine(Application.Current.FindResource("readmeTxtNaiveProxyExplainLine05").ToString());
+
+                //sw.WriteLine("NaiveSharp(windows)下载网址：https://github.com/KevinZonda/NaiveSharp/releases");
+                sw.WriteLine(Application.Current.FindResource("readmeTxtNaiveProxyExplainLine06").ToString());
+
                 sw.WriteLine("-----------------------------------------\n");
 
                 sw.WriteLine("url.txt");
 
-                //sw.WriteLine("此文件为NaiveGUI(windows)复制粘贴导入节点的网址");
+                //sw.WriteLine("此文件为NaiveSharp(windows)复制粘贴导入节点的网址");
                 sw.WriteLine(Application.Current.FindResource("readmeTxtNaiveProxyExplainLine05").ToString());
 
-                //sw.WriteLine("NaiveGUI(windows)下载网址：https://github.com/ExcitedCodes/NaiveGUI/releases");
+                //sw.WriteLine("NaiveSharp(windows)下载网址：https://github.com/KevinZonda/NaiveSharp/releases");
                 sw.WriteLine(Application.Current.FindResource("readmeTxtNaiveProxyExplainLine06").ToString());
 
                 sw.WriteLine("-----------------------------------------\n");
@@ -3005,7 +3100,7 @@ namespace ProxySU
             return spaceString + strTemp;
         }
 
-       
+   
     }
 
 

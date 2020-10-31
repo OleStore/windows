@@ -48,6 +48,7 @@ namespace ProxySU
 
             //隐藏QUIC密钥
             FirstQuicHideEncryption();
+            RadioButtonVMESSmKCP.IsChecked = true;
         }
         //取消不在当前活动选项卡中的其他所有选项卡中的所有RadioBuuton的选中状态
         //代码参考网址：https://blog.csdn.net/weixin_42583999/article/details/103468857
@@ -110,7 +111,7 @@ namespace ProxySU
                 MainWindow.ReceiveConfigurationParameters[8] = RadioButtonTCP2TLS.Content.ToString();
 
                 //传递域名
-                MainWindow.ReceiveConfigurationParameters[4] = TextBoxDomain.Text.ToString();
+                MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomain.Text);
                
             }
             
@@ -123,7 +124,7 @@ namespace ProxySU
                 MainWindow.ReceiveConfigurationParameters[8] = RadioButtonTcpTLS2SelfSigned.Content.ToString();
 
                 //传递域名
-                // MainWindow.ReceiveConfigurationParameters[4] = TextBoxDomain.Text.ToString();
+                // MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomain.Text);
 
             }
 
@@ -142,12 +143,10 @@ namespace ProxySU
                 MainWindow.ReceiveConfigurationParameters[8] = RadioButtonVlessXtlsTcp.Content.ToString();
 
                 //传递域名
-                MainWindow.ReceiveConfigurationParameters[4] = TextBoxDomain.Text.ToString();
+                MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomain.Text);
                 //传递伪装网站
-                MainWindow.ReceiveConfigurationParameters[7] = TextBoxMaskSites.Text.ToString();
-                //处理伪装网站域名中的前缀
-                DisguiseURLprocessing();
- 
+                MainWindow.ReceiveConfigurationParameters[7] = DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
+
             }
 
             //VLESS+TCP+TLS+Web模式选中
@@ -161,11 +160,9 @@ namespace ProxySU
                 MainWindow.ReceiveConfigurationParameters[8] = RadioButtonVlessTcpTlsWeb.Content.ToString();
 
                 //传递域名
-                MainWindow.ReceiveConfigurationParameters[4] = TextBoxDomain.Text.ToString();
+                MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomain.Text);
                 //传递伪装网站
-                MainWindow.ReceiveConfigurationParameters[7] = TextBoxMaskSites.Text.ToString();
-                //处理伪装网站域名中的前缀
-                DisguiseURLprocessing();
+                MainWindow.ReceiveConfigurationParameters[7] = DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
 
             }
 
@@ -180,13 +177,11 @@ namespace ProxySU
                 MainWindow.ReceiveConfigurationParameters[8] = RadioButtonVlessWebSocketTlsWeb.Content.ToString();
 
                 //传递路径
-                MainWindow.ReceiveConfigurationParameters[6] = TextBoxPath.Text.ToString();
+                MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxPath.Text);
                 //传递域名
-                MainWindow.ReceiveConfigurationParameters[4] = TextBoxDomain.Text.ToString();
+                MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomain.Text);
                 //传递伪装网站
-                MainWindow.ReceiveConfigurationParameters[7] = TextBoxMaskSites.Text.ToString();
-                //处理伪装网站域名中的前缀
-                DisguiseURLprocessing();
+                MainWindow.ReceiveConfigurationParameters[7] = DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
             }
 
             //VLESS+http2+TLS+Web模式选中
@@ -200,13 +195,11 @@ namespace ProxySU
                 MainWindow.ReceiveConfigurationParameters[8] = RadioButtonVlessHttp2Web.Content.ToString();
 
                 //传递路径
-                MainWindow.ReceiveConfigurationParameters[6] = TextBoxPath.Text.ToString();
+                MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxPath.Text);
                 //传递域名
-                MainWindow.ReceiveConfigurationParameters[4] = TextBoxDomain.Text.ToString();
+                MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomain.Text);
                 //传递伪装网站
-                MainWindow.ReceiveConfigurationParameters[7] = TextBoxMaskSites.Text.ToString();
-                //处理伪装网站域名中的前缀
-                DisguiseURLprocessing();
+                MainWindow.ReceiveConfigurationParameters[7] = DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
             }
 
             //VLESS+VMESS+XTLS+TCP+WebSocket+Web模式被选中
@@ -218,18 +211,16 @@ namespace ProxySU
                 //传递方案名称
                 MainWindow.ReceiveConfigurationParameters[8] = RadioButtonVlessVmessXtlsTcpWebSocketHot.Content.ToString();
                 //传递路径
-                MainWindow.ReceiveConfigurationParameters[3] = TextBoxPathVlessWS.Text.ToString();//VLESS ws Path
-                MainWindow.ReceiveConfigurationParameters[9] = TextBoxPathVmessTcp.Text.ToString();//VMESS tcp Path
-                MainWindow.ReceiveConfigurationParameters[6] = TextBoxPathVmessWS.Text.ToString();//VMESS ws Path
+                MainWindow.ReceiveConfigurationParameters[3] = PreTrim(TextBoxPathVlessWS.Text);//VLESS ws Path
+                MainWindow.ReceiveConfigurationParameters[9] = PreTrim(TextBoxPathVmessTcp.Text);//VMESS tcp Path
+                MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxPathVmessWS.Text);//VMESS ws Path
 
                 //传递域名
-                MainWindow.ReceiveConfigurationParameters[4] = TextBoxDomain.Text.ToString();
+                MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomain.Text);
                 //传递混淆方式(VMESS TCP Path方式所用)
                 MainWindow.ReceiveConfigurationParameters[5] = "http";
                 //传递伪装网站
-                MainWindow.ReceiveConfigurationParameters[7] = TextBoxMaskSites.Text.ToString();
-                //处理伪装网站域名中的前缀
-                DisguiseURLprocessing();
+                MainWindow.ReceiveConfigurationParameters[7] = DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
 
             }
 
@@ -257,9 +248,9 @@ namespace ProxySU
                 //传递方案名称
                 MainWindow.ReceiveConfigurationParameters[8] = RadioButtonWebSocketTLS.Content.ToString();
                 //传递路径
-                MainWindow.ReceiveConfigurationParameters[6] = TextBoxPath.Text.ToString();
+                MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxPath.Text);
                 //传递域名
-                MainWindow.ReceiveConfigurationParameters[4] = TextBoxDomain.Text.ToString();
+                MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomain.Text);
 
             }
             
@@ -274,13 +265,11 @@ namespace ProxySU
                 MainWindow.ReceiveConfigurationParameters[8] = RadioButtonWebSocketTLS2Web.Content.ToString();
 
                 //传递路径
-                MainWindow.ReceiveConfigurationParameters[6] = TextBoxPath.Text.ToString();
+                MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxPath.Text);
                 //传递域名
-                MainWindow.ReceiveConfigurationParameters[4] = TextBoxDomain.Text.ToString();
+                MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomain.Text);
                 //传递伪装网站
-                MainWindow.ReceiveConfigurationParameters[7] = TextBoxMaskSites.Text.ToString();
-                //处理伪装网站域名中的前缀
-                DisguiseURLprocessing();
+                MainWindow.ReceiveConfigurationParameters[7] = DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
 
             }
             
@@ -293,9 +282,9 @@ namespace ProxySU
                 MainWindow.ReceiveConfigurationParameters[8] = RadioButtonWebSocketTLSselfSigned.Content.ToString();
 
                 //传递路径
-                MainWindow.ReceiveConfigurationParameters[6] = TextBoxPath.Text.ToString();
+                MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxPath.Text);
                 //传递域名
-                //MainWindow.ReceiveConfigurationParameters[4] = TextBoxDomain.Text.ToString();
+                //MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomain.Text);
 
             }
 
@@ -314,9 +303,9 @@ namespace ProxySU
                 MainWindow.ReceiveConfigurationParameters[8] = RadioButtonHTTP2.Content.ToString();
 
                 //传递路径
-                MainWindow.ReceiveConfigurationParameters[6] = TextBoxPath.Text.ToString();
+                MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxPath.Text);
                 //传递域名
-                MainWindow.ReceiveConfigurationParameters[4] = TextBoxDomain.Text.ToString();
+                MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomain.Text);
                
             }
             
@@ -331,13 +320,11 @@ namespace ProxySU
                 MainWindow.ReceiveConfigurationParameters[8] = RadioButtonHTTP2Web.Content.ToString();
 
                 //传递路径
-                MainWindow.ReceiveConfigurationParameters[6] = TextBoxPath.Text.ToString();
+                MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxPath.Text);
                 //传递域名
-                MainWindow.ReceiveConfigurationParameters[4] = TextBoxDomain.Text.ToString();
+                MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomain.Text);
                 //传递伪装网站
-                MainWindow.ReceiveConfigurationParameters[7] = TextBoxMaskSites.Text.ToString();
-                //处理伪装网站域名中的前缀
-                DisguiseURLprocessing();
+                MainWindow.ReceiveConfigurationParameters[7] = DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
 
             }
             
@@ -350,9 +337,9 @@ namespace ProxySU
                 MainWindow.ReceiveConfigurationParameters[8] = RadioButtonHTTP2selfSigned.Content.ToString();
 
                 //传递路径
-                MainWindow.ReceiveConfigurationParameters[6] = TextBoxPath.Text.ToString();
+                MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxPath.Text);
                 //传递域名
-                //MainWindow.ReceiveConfigurationParameters[4] = TextBoxDomain.Text.ToString();
+                //MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomain.Text);
 
             }
 
@@ -370,9 +357,9 @@ namespace ProxySU
                 //传递伪装类型
                 MainWindow.ReceiveConfigurationParameters[5] = "none";
                 //传递mKCP Seed
-                if (String.IsNullOrEmpty(TextBoxQuicAndMkcpSeedUUID.Text)==false)
+                if (String.IsNullOrEmpty(PreTrim(TextBoxQuicAndMkcpSeedUUID.Text)) ==false)
                 {
-                    MainWindow.ReceiveConfigurationParameters[6] = TextBoxQuicAndMkcpSeedUUID.Text;
+                    MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxQuicAndMkcpSeedUUID.Text);
                 }
             }
             
@@ -386,9 +373,9 @@ namespace ProxySU
                 //传递伪装类型
                 MainWindow.ReceiveConfigurationParameters[5] = "srtp";
                 //传递mKCP Seed
-                if (String.IsNullOrEmpty(TextBoxQuicAndMkcpSeedUUID.Text) == false)
+                if (String.IsNullOrEmpty(PreTrim(TextBoxQuicAndMkcpSeedUUID.Text)) == false)
                 {
-                    MainWindow.ReceiveConfigurationParameters[6] = TextBoxQuicAndMkcpSeedUUID.Text;
+                    MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxQuicAndMkcpSeedUUID.Text);
                 }
             }
             
@@ -402,9 +389,9 @@ namespace ProxySU
                 //传递伪装类型
                 MainWindow.ReceiveConfigurationParameters[5] = "utp";
                 //传递mKCP Seed
-                if (String.IsNullOrEmpty(TextBoxQuicAndMkcpSeedUUID.Text) == false)
+                if (String.IsNullOrEmpty(PreTrim(TextBoxQuicAndMkcpSeedUUID.Text)) == false)
                 {
-                    MainWindow.ReceiveConfigurationParameters[6] = TextBoxQuicAndMkcpSeedUUID.Text;
+                    MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxQuicAndMkcpSeedUUID.Text);
                 }
             }
             
@@ -418,9 +405,9 @@ namespace ProxySU
                 //传递伪装类型
                 MainWindow.ReceiveConfigurationParameters[5] = "wechat-video";
                 //传递mKCP Seed
-                if (String.IsNullOrEmpty(TextBoxQuicAndMkcpSeedUUID.Text) == false)
+                if (String.IsNullOrEmpty(PreTrim(TextBoxQuicAndMkcpSeedUUID.Text)) == false)
                 {
-                    MainWindow.ReceiveConfigurationParameters[6] = TextBoxQuicAndMkcpSeedUUID.Text;
+                    MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxQuicAndMkcpSeedUUID.Text);
                 }
             }
             
@@ -434,9 +421,9 @@ namespace ProxySU
                 //传递伪装类型
                 MainWindow.ReceiveConfigurationParameters[5] = "dtls";
                 //传递mKCP Seed
-                if (String.IsNullOrEmpty(TextBoxQuicAndMkcpSeedUUID.Text) == false)
+                if (String.IsNullOrEmpty(PreTrim(TextBoxQuicAndMkcpSeedUUID.Text)) == false)
                 {
-                    MainWindow.ReceiveConfigurationParameters[6] = TextBoxQuicAndMkcpSeedUUID.Text;
+                    MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxQuicAndMkcpSeedUUID.Text);
                 }
             }
             
@@ -450,9 +437,9 @@ namespace ProxySU
                 //传递伪装类型
                 MainWindow.ReceiveConfigurationParameters[5] = "wireguard";
                 //传递mKCP Seed
-                if (String.IsNullOrEmpty(TextBoxQuicAndMkcpSeedUUID.Text) == false)
+                if (String.IsNullOrEmpty(PreTrim(TextBoxQuicAndMkcpSeedUUID.Text)) == false)
                 {
-                    MainWindow.ReceiveConfigurationParameters[6] = TextBoxQuicAndMkcpSeedUUID.Text;
+                    MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxQuicAndMkcpSeedUUID.Text);
                 }
             }
 
@@ -470,7 +457,7 @@ namespace ProxySU
                 //传递伪装类型
                 MainWindow.ReceiveConfigurationParameters[5] = "none";
                 //QUIC 密钥
-                MainWindow.ReceiveConfigurationParameters[6] = TextBoxQuicAndMkcpSeedUUID.Text;
+                MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxQuicAndMkcpSeedUUID.Text);
                 //QUIC加密方法
                 MainWindow.ReceiveConfigurationParameters[3] = GetEncryptionMethodSS();
             }
@@ -485,7 +472,7 @@ namespace ProxySU
                 //传递伪装类型
                 MainWindow.ReceiveConfigurationParameters[5] = "srtp";
                 //QUIC 密钥
-                MainWindow.ReceiveConfigurationParameters[6] = TextBoxQuicAndMkcpSeedUUID.Text;
+                MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxQuicAndMkcpSeedUUID.Text);
                 //QUIC加密方法
                 MainWindow.ReceiveConfigurationParameters[3] = GetEncryptionMethodSS();
             }
@@ -500,7 +487,7 @@ namespace ProxySU
                 //传递伪装类型
                 MainWindow.ReceiveConfigurationParameters[5] = "utp";
                 //QUIC 密钥
-                MainWindow.ReceiveConfigurationParameters[6] = TextBoxQuicAndMkcpSeedUUID.Text;
+                MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxQuicAndMkcpSeedUUID.Text);
                 //QUIC加密方法
                 MainWindow.ReceiveConfigurationParameters[3] = GetEncryptionMethodSS();
             }
@@ -515,7 +502,7 @@ namespace ProxySU
                 //传递伪装类型
                 MainWindow.ReceiveConfigurationParameters[5] = "wechat-video";
                 //QUIC 密钥
-                MainWindow.ReceiveConfigurationParameters[6] = TextBoxQuicAndMkcpSeedUUID.Text;
+                MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxQuicAndMkcpSeedUUID.Text);
                 //QUIC加密方法
                 MainWindow.ReceiveConfigurationParameters[3] = GetEncryptionMethodSS();
             }
@@ -530,7 +517,7 @@ namespace ProxySU
                 //传递伪装类型
                 MainWindow.ReceiveConfigurationParameters[5] = "dtls";
                 //QUIC 密钥
-                MainWindow.ReceiveConfigurationParameters[6] = TextBoxQuicAndMkcpSeedUUID.Text;
+                MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxQuicAndMkcpSeedUUID.Text);
                 //QUIC加密方法
                 MainWindow.ReceiveConfigurationParameters[3] = GetEncryptionMethodSS();
             }
@@ -545,7 +532,7 @@ namespace ProxySU
                 //传递伪装类型
                 MainWindow.ReceiveConfigurationParameters[5] = "wireguard";
                 //QUIC 密钥
-                MainWindow.ReceiveConfigurationParameters[6] = TextBoxQuicAndMkcpSeedUUID.Text;
+                MainWindow.ReceiveConfigurationParameters[6] = PreTrim(TextBoxQuicAndMkcpSeedUUID.Text);
                 //QUIC加密方法
                 MainWindow.ReceiveConfigurationParameters[3] = GetEncryptionMethodSS();
             }
@@ -553,10 +540,19 @@ namespace ProxySU
             #endregion
 
             //传递服务端口
-            MainWindow.ReceiveConfigurationParameters[1] = TextBoxServerListenPort.Text.ToString();
+            MainWindow.ReceiveConfigurationParameters[1] = PreTrim(TextBoxServerListenPort.Text);
             //传递uuid
-            MainWindow.ReceiveConfigurationParameters[2] = TextBoxNewUUID.Text.ToString();
+            MainWindow.ReceiveConfigurationParameters[2] = PreTrim(TextBoxNewUUID.Text);
 
+            if (RadioButtonVLESSmKCP.IsChecked == true)
+            {
+                MainWindow.mKCPvlessIsSet = true;
+            }
+            else
+            {
+                MainWindow.mKCPvlessIsSet = false;
+            }
+               
             if (domainNotEmpty)
             {
                 this.Close();
@@ -569,24 +565,23 @@ namespace ProxySU
 
 
         //伪装网站处理
-        private void DisguiseURLprocessing()
+        //DisguiseURLprocessing(string fakeUrl);
+        private string DisguiseURLprocessing(string fakeUrl)
         {
             //处理伪装网站域名中的前缀
-            if (TextBoxMaskSites.Text.ToString().Length >= 7)
+            if (fakeUrl.Length >= 7)
             {
-                string testDomainMask = TextBoxMaskSites.Text.Substring(0, 7);
+                string testDomainMask = fakeUrl.Substring(0, 7);
                 if (String.Equals(testDomainMask, "https:/") || String.Equals(testDomainMask, "http://"))
                 {
-                    //MessageBox.Show(testDomain);
-                    MainWindow.ReceiveConfigurationParameters[7] = TextBoxMaskSites.Text.Replace("/", "\\/");
+                    string[] tmpUrl = fakeUrl.Split('/');
+                    fakeUrl = tmpUrl[2];
                 }
-                else
-                {
-                    MainWindow.ReceiveConfigurationParameters[7] = "http:\\/\\/" + TextBoxMaskSites.Text;
-                }
+
             }
+            return fakeUrl;
         }
-        
+
         #region 其他设置中的界面控制
 
         private void RadioButtonTCP_Checked(object sender, RoutedEventArgs e)
@@ -1012,8 +1007,8 @@ namespace ProxySU
         //显示伪装网站
         private void ShowMaskSites()
         {
-            TextBlockMaskSites.Visibility = Visibility.Collapsed;
-            TextBoxMaskSites.Visibility = Visibility.Collapsed;
+            TextBlockMaskSites.Visibility = Visibility.Visible;
+            TextBoxMaskSites.Visibility = Visibility.Visible;
         }
         #endregion
 
@@ -1055,7 +1050,11 @@ namespace ProxySU
             path = GenerateRandomPath();
             TextBoxPathVmessWS.Text = $"/{path}";
         }
-
+        //TextBox输入内容做预处理
+        private string PreTrim(string preString)
+        {
+            return preString.Trim();
+        }
         //生成随机端口
         private int GetRandomPort()
         {
@@ -1084,7 +1083,7 @@ namespace ProxySU
         //域名检测是否为空
         private bool TestDomainIsEmpty()
         {
-            if (string.IsNullOrEmpty(TextBoxDomain.Text.ToString()) == true)
+            if (string.IsNullOrEmpty(PreTrim(TextBoxDomain.Text)) == true)
             {
                 //****** "域名不能为空，请检查相关参数设置！" ******
                 MessageBox.Show(Application.Current.FindResource("MessageBoxShow_DomainNotEmpty").ToString());

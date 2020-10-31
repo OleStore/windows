@@ -7,11 +7,17 @@ BBR一键开启（仅支持CentOS8/Debian9/10/Ubuntu18.04及以上）,支持语�
 
 编译环境Visual Studio 2017  使用WPF界面。可一键安装V2ray、Trojan、NaiveProxy，Trojan-Go,ShadowsocksR(SSR),Shadowsocks-libev and Plugins、MTProto+TLS 后续还会再添加其他。  
 
+##### ProxySU使用教程  
+[一键搭建科学上网工具ProxySU](https://github.com/Alvin9999/new-pac/wiki/%E4%B8%80%E9%94%AE%E6%90%AD%E5%BB%BA%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%E5%B7%A5%E5%85%B7ProxySU)------------网友[Alvin9999](https://github.com/Alvin9999)制作。    
+[Youtube视频教程](https://www.youtube.com/watch?v=ipFZDE1Aqoo)---------------------------网友[jc-nf那坨](https://www.youtube.com/channel/UC52iA9wBGGN7LBWSdyI-yfg)制作，需要先翻墙后观看。  
+
 ##### 使用提醒：  
-纯IPV6主机，安装过程中，将临时设置NAT64网关。仅用于布署代理，布署完成后，则会删除。注意，纯IPV6 的主机无法直接访问纯IPV4的网络。  
+纯IPV6主机，安装过程中，将临时设置NAT64网关。仅用于布署代理，布署完成后，则会删除。注意，纯IPV6 的主机无法直接访问纯IPV4的网络。(不推荐使用纯ipv6主机做为代理节点)  
 ProxySU的安装流程，是假设在全新系统下，没有装过以上代理软件，如果已经安装过，最好将系统重装一下，会减少很多的麻烦。  
 ProxySU将安装代理软件的最新版本，为了最好的兼容，请确保客户端也是当前最新版本。  
-ProxySU在开发过程中，一般都是在vultr的vps中测试，测试系统版本为：Centos7/8  Debian9/10 Ubuntu18.04/20.04。由于同一个版本的Linux系统，不同的VPS商,云服务商也不完全相同。实在没有精力去逐一测试。如果安装失败，可以先尝试以下方法解决：1.如果以前装过翻墙软件，请重装一下vps系统后，再试。2.更换为其他版本的linux发行版，再试。以上两种方法不能解决，请各位翻墙网友及时发[issues](https://github.com/proxysu/windows/issues)，或者到[TG群组](https://t.me/proxysuissues)，[推特](https://twitter.com/proxysu_true)下反馈，希望这个工具做的越来越好，让更多人喜欢。谢谢。
+ProxySU在开发过程中，一般都是在vultr的vps中测试，测试系统版本为：Centos7/8  Debian9/10 Ubuntu18.04/20.04。由于同一个版本的Linux系统，不同的VPS商,云服务商也不完全相同。实在没有精力去逐一测试。如果安装失败，可以先尝试以下方法解决：1.如果以前装过翻墙软件，请重装一下vps系统后，再试。2.更换为其他版本的linux发行版，再试。以上两种方法不能解决，请各位翻墙网友及时发[issues](https://github.com/proxysu/windows/issues)，或者到[TG群组](https://t.me/proxysuissues)，[推特](https://twitter.com/proxysu_true)下反馈，希望这个工具做的越来越好，让更多人喜欢。谢谢。  
+
+#### 免责声明：ProxySU属于自用分享工具，请勿用于违背良知与道德之事，否则后果自负。
 
 ##### V2ray可一键安装的模式有： 
 
@@ -19,21 +25,18 @@ ProxySU在开发过程中，一般都是在vultr的vps中测试，测试系统�
 * Vless+tcp+TLS+Web (新热门协议)  
 * VLESS+WebSocket+TLS+Web  
 * VLESS+http2+TLS+Web  
-
+* VLESS+mKCP
 * tcp 
 * tcp+http伪装  
 * tcp+TLS 
 * tcp+TLS （自签证书）
-
 * WebSocket
 * WebSocket+TLS 
 * WebSocket+TLS+Web 
 * WebSocket+TLS（自签证书） 
-
 * http2  
 * http2+TLS+Web
 * http2（自签证书）  
-
 * mKCP及各种伪装 
 * QUIC及各种伪装。  
 注：mKCP和QUIC模式使用udp协议，可以有效减少网络延时，有加速的作用，但在网络管控严厉时期，会导致IP被封，遇到的一次，就是刚安装好，使用了3个小时后，IP被封（现已确认是mKCP的流量被识别导致，项目组正在维护中。2020.6.10维护完毕，升级到版本4.24.2及以上，启用mKCP密钥可增强抗识别）。以上模式最推荐的是WebSocket+TLS+Web 和http2+TLS+Web 需要有一个域名。如果能加上CDN则稳定性更好。加上CDN后，是加速还是减速，与线路有关。
@@ -51,7 +54,7 @@ ProxySU在开发过程中，一般都是在vultr的vps中测试，测试系统�
 ##### ShadowsocksR(SSR)一键安装：  
 * SSR+TLS+Caddy  
 
-##### Shadowsocks-libev及相关插件一键安装：  
+##### SS (Shadowsocks-libev) 及相关插件一键安装：  
 * SS 经典模式  
 * SS+WebSocket+TLS+Caddy(Web前置) (推荐)  
 * SS+WebSocket  
@@ -72,6 +75,17 @@ ProxySU在开发过程中，一般都是在vultr的vps中测试，测试系统�
 
 ##### 关于卸载功能  
 有网友要求，可以卸载其他方法安装的，经过考虑，还是不这样做。1，容易引起争议。2，不容易卸载干净，在用ProxySU安装时可能还会出错。所以第一次使用ProxySU建议使用全新系统，如果以前安装过代理程序，请尽可能将系统重装一下，可以减少很多安装的错误和冲突。  
+
+##### 关于兼容的密钥格式    
+ProxySU调用[SSH.NET](https://github.com/sshnet/SSH.NET)库登录远程主机，目前[SSH.NET](https://github.com/sshnet/SSH.NET)只支持以下格式的密钥：  
+* RSA in OpenSSL PEM and ssh.com format  
+* DSA in OpenSSL PEM and ssh.com format  
+* ECDSA 256/384/521 in OpenSSL PEM format  
+* ED25519 in OpenSSH key format  
+见官方说明：  
+https://github.com/sshnet/SSH.NET#public-key-authentication  
+如果当前拥有的密钥格式不是以上几种，可以下载[puttygen](https://www.puttygen.com/)工具，将其转换成上面的格式。  
+[puttygen](https://www.puttygen.com/)使用教程可以[看这里](https://github.com/proxysu/windows/wiki/PrivateKeyConversionFormat)
 
 ##### 关于Let's Encrypt证书  
 ProxySU所使用的acme.sh与Caddy，都是申请的Let's Encrypt免费证书。三个月需要续期，都是自动完成续期的，无需用户操作。但是Let's Encrypt证书有一些限制，请知晓，如下：  
@@ -117,7 +131,7 @@ Let's Encrypt证书申请频率的限制
 ###### NaiveProxy支持生成用于：
 
 * [NaiveProxy官方客户端](https://github.com/klzgrad/naiveproxy/releases)配置文件（windows客户端配置）  
-* [NaiveGUI](https://github.com/ExcitedCodes/NaiveGUI/releases)(第三方Windows图形客户端)URL导入链接。  
+* [NaiveSharp(windows)](https://github.com/KevinZonda/NaiveSharp/releases)(第三方Windows图形客户端)URL导入链接。  
 * [Qv2ray (windows)](https://github.com/Qv2ray/Qv2ray)客户端导入二维码和URL  
 注：这里多说几句NaiveProxy，现在墙越来越高，翻墙软件需要隐藏访问目标网址和加密数据的同时，还要隐藏自己的流量特征，不被识别出是代理流量。V2ray，Trojan都有其自己的实现。而NaiveProxy是配合Caddy的一个http.forwardproxy插件，插件有防嗅探，转发流量的功能。代理http流量很完美，但是在代理https流量时，会出现长度特征，NaiverProxy则弥补了这一点，消除了代理https时的流量特征，另外还应用 [Chrome's network stack](https://www.chromium.org/developers/design-documents/network-stack).更好的消除TLS的指纹特征。详细介绍请看项目官方介绍：[NaiveProxy官方文档](https://github.com/klzgrad/naiveproxy)。有兴趣的不妨一试。
 
@@ -127,7 +141,7 @@ Let's Encrypt证书申请频率的限制
 * [SSRR（Android）](https://github.com/shadowsocksrr/shadowsocksr-android/releases)导入二维码和URL  
 * [Shadowrocket (ios)](https://apps.apple.com/us/app/shadowrocket/id932747118)导入二维码和URL  
 
-###### Shadowsocks-libev 目前已支持生成用于  
+###### SS (Shadowsocks-libev) 目前已支持生成用于  
 
 * [Shadowsocks (windows)](https://github.com/shadowsocks/shadowsocks-windows/releases)客户端导入二维码和URL  
 * [shadowsocks（Android）](https://github.com/shadowsocks/shadowsocks-android/releases)导入二维码和URL  
