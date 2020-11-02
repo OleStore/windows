@@ -1,5 +1,4 @@
-##  近期暂停更新说明
-近期业余时间少了，可能无暇顾及这个项目，所以暂时停一段时间，等事情忙过了，还会来再继续更新的。ProxySU还在发展完善中。肯定存在众多问题，如果最新版本无法成功安装，可以使用以前的旧版本试试，另外切换一下模式。或者更换一个linux版本，各个版本都试一下，应该会有可以成功的，如果是证书总是申请错误，可能是需要更换域名或者IP。本人只是一个业余的编程爱好者，还请多理解一下，谢谢各位网友对ProxySU的喜爱。过段时间，ProxySU会继续更新的。
+
 # ProxySU
 V2ray, Trojan, NaiveProxy, Trojan-Go, ShadowsocksR(SSR),Shadowsocks-libev and Plugins,MTProto+TLS,BBR install tools for windows。  
 V2ray，Trojan，NaiveProxy, Trojan-Go, ShadowsocksR(SSR),Shadowsocks-libev及相关插件,MTProto+TLS 一键安装工具。支持纯ipv6主机一键安装代理。  
@@ -8,8 +7,8 @@ BBR一键开启（仅支持CentOS8/Debian9/10/Ubuntu18.04及以上）,支持语�
 编译环境Visual Studio 2017  使用WPF界面。可一键安装V2ray、Trojan、NaiveProxy，Trojan-Go,ShadowsocksR(SSR),Shadowsocks-libev and Plugins、MTProto+TLS 后续还会再添加其他。  
 
 ##### ProxySU使用教程  
-[一键搭建科学上网工具ProxySU](https://github.com/Alvin9999/new-pac/wiki/%E4%B8%80%E9%94%AE%E6%90%AD%E5%BB%BA%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%E5%B7%A5%E5%85%B7ProxySU)------------网友[Alvin9999](https://github.com/Alvin9999)制作。    
-[Youtube视频教程](https://www.youtube.com/watch?v=ipFZDE1Aqoo)---------------------------网友[jc-nf那坨](https://www.youtube.com/channel/UC52iA9wBGGN7LBWSdyI-yfg)制作，需要先翻墙后观看。  
+[一键搭建科学上网工具ProxySU](https://github.com/Alvin9999/new-pac/wiki/%E4%B8%80%E9%94%AE%E6%90%AD%E5%BB%BA%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%E5%B7%A5%E5%85%B7ProxySU)------------网友 [Alvin9999](https://github.com/Alvin9999) 制作。    
+[Youtube视频教程](https://www.youtube.com/watch?v=ipFZDE1Aqoo)---------------------------网友 [jc-nf那坨](https://www.youtube.com/channel/UC52iA9wBGGN7LBWSdyI-yfg) 制作，需要先翻墙后观看。  
 
 ##### 使用提醒：  
 纯IPV6主机，安装过程中，将临时设置NAT64网关。仅用于布署代理，布署完成后，则会删除。注意，纯IPV6 的主机无法直接访问纯IPV4的网络。(不推荐使用纯ipv6主机做为代理节点)  
