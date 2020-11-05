@@ -105,6 +105,8 @@ namespace ProxySU
                         TextBoxEncryption.Text = "none";
                         TextBoxTransmission.Text = "tcp";
                         TextBoxCamouflageType.Text = "none";
+                        //TLS的Host /Quic 加密方式
+                        TextBoxHostQuicEncryption.Text = MainWindow.ReceiveConfigurationParameters[4];
                         TextBoxTLS.Text = "tls";
                         ShowHostName();
                         ShowPathV2ray();
@@ -113,6 +115,8 @@ namespace ProxySU
                     {
                         TextBoxTransmission.Text = "tcp";
                         TextBoxCamouflageType.Text = "none";
+                        //TLS的Host /Quic 加密方式
+                        TextBoxHostQuicEncryption.Text = MainWindow.ReceiveConfigurationParameters[4];
                         TextBoxTLS.Text = "tls";
                         ShowHostName();
                         ShowPathV2ray();
@@ -123,6 +127,8 @@ namespace ProxySU
 
                         TextBoxTransmission.Text = "tcp";
                         TextBoxCamouflageType.Text = "none";
+                        //TLS的Host /Quic 加密方式
+                        TextBoxHostQuicEncryption.Text = MainWindow.ReceiveConfigurationParameters[4];
                         TextBoxEncryption.Text = "none";
                         TextBoxTLS.Text = "xtls";
                         HideAlterId();
@@ -136,6 +142,8 @@ namespace ProxySU
 
                         TextBoxTransmission.Text = "tcp";
                         TextBoxCamouflageType.Text = "none";
+                        //TLS的Host /Quic 加密方式
+                        TextBoxHostQuicEncryption.Text = MainWindow.ReceiveConfigurationParameters[4];
                         TextBoxEncryption.Text = "none";
                         TextBoxTLS.Text = "tls";
                         HideAlterId();
@@ -149,6 +157,8 @@ namespace ProxySU
 
                         TextBoxTransmission.Text = "ws";
                         TextBoxCamouflageType.Text = "none";
+                        //TLS的Host /Quic 加密方式
+                        TextBoxHostQuicEncryption.Text = MainWindow.ReceiveConfigurationParameters[4];
                         TextBoxEncryption.Text = "none";
                         TextBoxTLS.Text = "tls";
                         HideAlterId();
@@ -162,6 +172,8 @@ namespace ProxySU
 
                         TextBoxTransmission.Text = "h2";
                         TextBoxCamouflageType.Text = "none";
+                        //TLS的Host /Quic 加密方式
+                        TextBoxHostQuicEncryption.Text = MainWindow.ReceiveConfigurationParameters[4];
                         TextBoxEncryption.Text = "none";
                         TextBoxTLS.Text = "tls";
                         HideAlterId();
@@ -182,6 +194,8 @@ namespace ProxySU
                         TextBoxEncryption.Text = "none";
                         TextBoxTransmission.Text = "ws";
                         TextBoxCamouflageType.Text = "none";
+                        //TLS的Host /Quic 加密方式
+                        TextBoxHostQuicEncryption.Text = MainWindow.ReceiveConfigurationParameters[4];
                         TextBoxTLS.Text = "tls";
                         ShowHostName();
                         ShowPathV2ray();
@@ -191,6 +205,8 @@ namespace ProxySU
                         TextBoxEncryption.Text = "none";
                         TextBoxTransmission.Text = "ws";
                         TextBoxCamouflageType.Text = "none";
+                        //TLS的Host /Quic 加密方式
+                        TextBoxHostQuicEncryption.Text = MainWindow.ReceiveConfigurationParameters[4];
                         TextBoxTLS.Text = "tls";
                         ShowHostName();
                         ShowPathV2ray();
@@ -199,6 +215,8 @@ namespace ProxySU
                     {
                         TextBoxTransmission.Text = "ws";
                         TextBoxCamouflageType.Text = "none";
+                        //TLS的Host /Quic 加密方式
+                        TextBoxHostQuicEncryption.Text = MainWindow.ReceiveConfigurationParameters[4];
                         TextBoxTLS.Text = "tls";
                         ShowHostName();
                         ShowPathV2ray();
@@ -208,6 +226,8 @@ namespace ProxySU
                         TextBoxEncryption.Text = "none";
                         TextBoxTransmission.Text = "h2";
                         TextBoxCamouflageType.Text = "none";
+                        //TLS的Host /Quic 加密方式
+                        TextBoxHostQuicEncryption.Text = MainWindow.ReceiveConfigurationParameters[4];
                         TextBoxTLS.Text = "tls";
                         ShowHostName();
                         ShowPathV2ray();
@@ -226,6 +246,8 @@ namespace ProxySU
                     {
                         TextBoxTransmission.Text = "h2";
                         TextBoxCamouflageType.Text = "none";
+                        //TLS的Host /Quic 加密方式
+                        TextBoxHostQuicEncryption.Text = MainWindow.ReceiveConfigurationParameters[4];
                         TextBoxTLS.Text = "tls";
                         ShowHostName();
                         ShowPathV2ray();
@@ -604,31 +626,8 @@ namespace ProxySU
                 string configSavePath = configDomainSavePath;
 
                 RadioButtonMtgIpv4.IsChecked = true;
-                //MessageBox.Show(MainWindow.ReceiveConfigurationParameters[9]);
-                JObject jObjectJson = JObject.Parse(MainWindow.ReceiveConfigurationParameters[9]);
-                //MessageBox.Show(jObjectJson.ToString());
-                if (jObjectJson["ipv4"]["tg_url"].ToString().Contains("nil") == false)
-                {
-                    RadioButtonMtgIpv4.Visibility = Visibility.Visible;
-                    TextBoxURLMtgTgIpv4.Text = jObjectJson["ipv4"]["tg_url"].ToString();
-                    ImageShareQRcodeMtgTgIpv4.Source = CreateQRCode(TextBoxURLMtgTgIpv4.Text, $"{configSavePath}\\QRIpv4Tg.bmp");
-                    using (StreamWriter sw = new StreamWriter($"{configSavePath}\\urlIpv4Tg.txt"))
-                    {
-                        sw.WriteLine(TextBoxURLMtgTgIpv4.Text);
-                    }
 
-                    TextBoxURLMtgTmeIpv4.Text = jObjectJson["ipv4"]["tme_url"].ToString();
-                    ImageShareQRcodeMtgTmeIpv4.Source = CreateQRCode(TextBoxURLMtgTmeIpv4.Text, $"{configSavePath}\\QRIpv4Tme.bmp");
-                    using (StreamWriter sw = new StreamWriter($"{configSavePath}\\urlIpv4Tme.txt"))
-                    {
-                        sw.WriteLine(TextBoxURLMtgTmeIpv4.Text);
-                    }
-                    RadioButtonMtgIpv4.IsChecked = true;
-                }
-                else
-                {
-                    RadioButtonMtgIpv4.Visibility = Visibility.Collapsed;
-                }
+                JObject jObjectJson = JObject.Parse(MainWindow.ReceiveConfigurationParameters[9]);
 
                 if (jObjectJson["ipv6"]["tg_url"].ToString().Contains("nil") == false)
                 {
@@ -652,7 +651,29 @@ namespace ProxySU
                 {
                     RadioButtonMtgIpv6.Visibility = Visibility.Collapsed;
                 }
-                
+
+                if (jObjectJson["ipv4"]["tg_url"].ToString().Contains("nil") == false)
+                {
+                    RadioButtonMtgIpv4.Visibility = Visibility.Visible;
+                    TextBoxURLMtgTgIpv4.Text = jObjectJson["ipv4"]["tg_url"].ToString();
+                    ImageShareQRcodeMtgTgIpv4.Source = CreateQRCode(TextBoxURLMtgTgIpv4.Text, $"{configSavePath}\\QRIpv4Tg.bmp");
+                    using (StreamWriter sw = new StreamWriter($"{configSavePath}\\urlIpv4Tg.txt"))
+                    {
+                        sw.WriteLine(TextBoxURLMtgTgIpv4.Text);
+                    }
+
+                    TextBoxURLMtgTmeIpv4.Text = jObjectJson["ipv4"]["tme_url"].ToString();
+                    ImageShareQRcodeMtgTmeIpv4.Source = CreateQRCode(TextBoxURLMtgTmeIpv4.Text, $"{configSavePath}\\QRIpv4Tme.bmp");
+                    using (StreamWriter sw = new StreamWriter($"{configSavePath}\\urlIpv4Tme.txt"))
+                    {
+                        sw.WriteLine(TextBoxURLMtgTmeIpv4.Text);
+                    }
+                    RadioButtonMtgIpv4.IsChecked = true;
+                }
+                else
+                {
+                    RadioButtonMtgIpv4.Visibility = Visibility.Collapsed;
+                }
 
                 using (StreamWriter sw = new StreamWriter($"{configSavePath}\\mtproto_info.json"))
                 {
@@ -675,6 +696,8 @@ namespace ProxySU
             TextBoxEncryption.Text = "none";
             TextBoxTransmission.Text = "tcp";
             TextBoxCamouflageType.Text = "none";
+            //TLS的Host /Quic 加密方式
+            TextBoxHostQuicEncryption.Text = MainWindow.ReceiveConfigurationParameters[4];
             TextBoxTLS.Text = "xtls";
             HideAlterId();
             ShowHostName();
@@ -694,6 +717,8 @@ namespace ProxySU
             TextBoxEncryption.Text = "none";
             TextBoxTransmission.Text = "tcp";
             TextBoxCamouflageType.Text = "none";
+            //TLS的Host /Quic 加密方式
+            TextBoxHostQuicEncryption.Text = MainWindow.ReceiveConfigurationParameters[4];
             TextBoxTLS.Text = "tls";
             HideAlterId();
             ShowHostName();
@@ -712,6 +737,8 @@ namespace ProxySU
             TextBoxEncryption.Text = "none";
             TextBoxTransmission.Text = "ws";
             TextBoxCamouflageType.Text = "none";
+            //TLS的Host /Quic 加密方式
+            TextBoxHostQuicEncryption.Text = MainWindow.ReceiveConfigurationParameters[4];
             TextBoxTLS.Text = "tls";
             HideAlterId();
             ShowHostName();
@@ -726,6 +753,8 @@ namespace ProxySU
             TextBoxEncryption.Text = "none";
             TextBoxTransmission.Text = "tcp";
             TextBoxCamouflageType.Text = "http";
+            //TLS的Host /Quic 加密方式
+            TextBoxHostQuicEncryption.Text = MainWindow.ReceiveConfigurationParameters[4];
             TextBoxTLS.Text = "tls";
             ShowAlterId();
             ShowHostName();
@@ -743,6 +772,8 @@ namespace ProxySU
             TextBoxEncryption.Text = "none";
             TextBoxTransmission.Text = "ws";
             TextBoxCamouflageType.Text = "none";
+            //TLS的Host /Quic 加密方式
+            TextBoxHostQuicEncryption.Text = MainWindow.ReceiveConfigurationParameters[4];
             TextBoxTLS.Text = "tls";
             ShowAlterId();
             ShowHostName();
@@ -966,10 +997,11 @@ namespace ProxySU
             v2rayNjsonObject["aid"] = TextBoxUUIDextra.Text; //设置额外ID
             v2rayNjsonObject["net"] = TextBoxTransmission.Text; //设置传输模式
             v2rayNjsonObject["type"] = TextBoxCamouflageType.Text; //设置伪装类型
-
+            
             if (TextBoxTransmission.Text.Contains("kcp") == true)
             {
                 v2rayNjsonObject["path"] = TextBoxQuicKeyMkcpSeedPath.Text;//设置mKCP Seed
+                v2rayNjsonObject["host"] = "";//设置Host
             }
             else if (TextBoxTransmission.Text.Contains("quic")==true)
             {
@@ -1650,6 +1682,7 @@ namespace ProxySU
             if (TextBoxTransmission.Text.Contains("kcp") == true)
             {
                 v2rayNjsonObject["path"] = TextBoxQuicKeyMkcpSeedPath.Text;//设置mKCP Seed
+                v2rayNjsonObject["host"] = "";//设置Host
             }
             else if (TextBoxTransmission.Text.Contains("quic") == true)
             {
@@ -1691,7 +1724,7 @@ namespace ProxySU
             if (File.Exists($"v2ray_config\\{plainSavePath}\\config.json"))
             {
                 File.Move($"v2ray_config\\{plainSavePath}\\config.json", $"{configSavePath}\\config.json");
-                //Directory.Delete($"v2ray_config\\{plainSavePath}");
+                Directory.Delete($"v2ray_config\\{plainSavePath}");
             }
 
             using (StreamWriter sw = new StreamWriter($"{configSavePath}\\readme.txt"))
@@ -2184,8 +2217,12 @@ namespace ProxySU
             //&encryption={trojanGoEncryption}
             //&plugin={trojanGoPlugin}
             //#{trojanGoRemarks}
-            string trojanGoUrl = $"trojan-go://{trojanGoPassword}@{trojanGoHost}:{trojanGoPort}/?sni={trojanGoSni}&type={trojanGoType}&host={trojanGohostName}";
+            string trojanGoUrl = $"trojan-go://{trojanGoPassword}@{trojanGoHost}:{trojanGoPort}/?sni={trojanGoSni}&type={trojanGoType}";
 
+            if (String.IsNullOrEmpty(trojanGohostName) == false)
+            {
+                trojanGoUrl += $"&host={trojanGohostName}";
+            }
             if (String.IsNullOrEmpty(trojanGoPath) == false)
             {
                 trojanGoUrl += $"&path={trojanGoPath}";
