@@ -72,25 +72,28 @@ namespace ProxySU
 
 
         //伪装网站处理
-        private string DisguiseURLprocessing(string fakeUrl)
-        {
+        //private string DisguiseURLprocessing(string fakeUrl)
+        //{
+            //var uri = new Uri(fakeUrl);
+            //return uri.Host;
             //处理伪装网站域名中的前缀
-            if (fakeUrl.Length >= 7)
-            {
-                string testDomainMask = fakeUrl.Substring(0, 7);
-                if (String.Equals(testDomainMask, "https:/") || String.Equals(testDomainMask, "http://"))
-                {
-                    string[] tmpUrl = fakeUrl.Split('/');
-                    fakeUrl = tmpUrl[2];
-                }
+            //if (fakeUrl.Length >= 7)
+            //{
+            //    string testDomainMask = fakeUrl.Substring(0, 7);
+            //    if (String.Equals(testDomainMask, "https:/") || String.Equals(testDomainMask, "http://"))
+            //    {
+            //        string[] tmpUrl = fakeUrl.Split('/');
+            //        fakeUrl = tmpUrl[2];
+            //    }
 
-            }
-            return fakeUrl;
-        }
+            //}
+            //return fakeUrl;
+       // }
 
         private void ButtondDecide_Click(object sender, RoutedEventArgs e)
         {
-            bool testDomain = true;
+            bool preDomainMask = ClassModel.PreDomainMask(TextBoxMaskSites.Text);
+            bool domainNotEmpty = true;
             //UncheckLayouts(TabControlTemplate);
             //SS 经典模式被选中
             if (RadioButtonNonePluginSS.IsChecked == true)
@@ -114,7 +117,7 @@ namespace ProxySU
             else if (RadioButtonObfsPluginHttpsWebSS.IsChecked == true)
             {
 
-                testDomain = TestDomainIsEmpty();
+                domainNotEmpty = ClassModel.TestDomainIsEmpty(TextBoxDomainSS.Text);
                 //传递模板类型
                 MainWindow.ReceiveConfigurationParameters[0] = "ObfsPluginHttpsWebSS";
                 //传递方案名称
@@ -122,7 +125,7 @@ namespace ProxySU
                 //传递域名
                 MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomainSS.Text);
                 //传递伪装网站
-                MainWindow.ReceiveConfigurationParameters[7] = DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
+                MainWindow.ReceiveConfigurationParameters[7] = ClassModel.DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
 
             }
 
@@ -140,7 +143,7 @@ namespace ProxySU
             //V2Ray-Plugin SS+WebSocket+TLS+Web模式被选中
             else if (RadioButtonWebSocketTLSWebFrontSS.IsChecked == true || RadioButtonWebSocketTLSWebFrontSSHot.IsChecked == true)
             {
-                testDomain = TestDomainIsEmpty();
+                domainNotEmpty = ClassModel.TestDomainIsEmpty(TextBoxDomainSS.Text);
                 //传递模板类型
                 MainWindow.ReceiveConfigurationParameters[0] = "WebSocketTLSWebFrontSS";
                 //传递方案名称
@@ -151,13 +154,13 @@ namespace ProxySU
                 //传递域名
                 MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomainSS.Text);
                 //传递伪装网站
-                MainWindow.ReceiveConfigurationParameters[7] = DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
+                MainWindow.ReceiveConfigurationParameters[7] = ClassModel.DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
 
             }
             //V2Ray-Plugin SS+QUIC模式被选中
             else if (RadioButtonQuicSS.IsChecked == true)
             {
-                testDomain = TestDomainIsEmpty();
+                domainNotEmpty = ClassModel.TestDomainIsEmpty(TextBoxDomainSS.Text);
                 //传递模板类型
                 MainWindow.ReceiveConfigurationParameters[0] = "QuicSS";
                 //传递方案名称
@@ -179,7 +182,7 @@ namespace ProxySU
             //SS+GoQuiet-Plugin模式被选中
             else if (RadioButtonGoQuietPluginSS.IsChecked == true)
             {
-                testDomain = TestDomainIsEmpty();
+                domainNotEmpty = ClassModel.TestDomainIsEmpty(TextBoxDomainSS.Text);
                 //传递模板类型
                 MainWindow.ReceiveConfigurationParameters[0] = "GoQuietPluginSS";
                 //传递方案名称
@@ -191,7 +194,7 @@ namespace ProxySU
             //SS+Cloak-Plugin模式被选中
             else if (RadioButtonCloakPluginSS.IsChecked == true)
             {
-                testDomain = TestDomainIsEmpty();
+                domainNotEmpty = ClassModel.TestDomainIsEmpty(TextBoxDomainSS.Text);
                 //传递模板类型
                 MainWindow.ReceiveConfigurationParameters[0] = "CloakPluginSS";
                 //传递方案名称
@@ -208,11 +211,11 @@ namespace ProxySU
             //传递加密方式
             MainWindow.ReceiveConfigurationParameters[3] = GetEncryptionMethodSS();
 
-            if (testDomain)
+            if (domainNotEmpty == true && preDomainMask == true)
             {
                 this.Close();
             }
-            
+
         }
 
         private void ButtondCancel_Click(object sender, RoutedEventArgs e) => Close();
@@ -374,18 +377,18 @@ namespace ProxySU
         }
 
         //域名检测是否为空
-        private bool TestDomainIsEmpty()
-        {
-            if (string.IsNullOrEmpty(PreTrim(TextBoxDomainSS.Text)) == true)
-            {
-                //****** "域名不能为空，请检查相关参数设置！" ******
-                MessageBox.Show(Application.Current.FindResource("MessageBoxShow_DomainNotEmpty").ToString());
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
+        //private bool TestDomainIsEmpty()
+        //{
+        //    if (string.IsNullOrEmpty(PreTrim(TextBoxDomainSS.Text)) == true)
+        //    {
+        //        //****** "域名不能为空，请检查相关参数设置！" ******
+        //        MessageBox.Show(Application.Current.FindResource("MessageBoxShow_DomainNotEmpty").ToString());
+        //        return false;
+        //    }
+        //    else
+        //    {
+        //        return true;
+        //    }
+        //}
     }
 }

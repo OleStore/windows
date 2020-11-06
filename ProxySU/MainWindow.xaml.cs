@@ -779,7 +779,7 @@ namespace ProxySU
             TextBlockCurrentlySelectedPlanPort.Text = ReceiveConfigurationParameters[1];        //服务器端口
             TextBlockCurrentlySelectedPlanUUID.Text = ReceiveConfigurationParameters[2];        //UUID
             TextBlockCurrentlySelectedPlanPathSeedKey.Text = ReceiveConfigurationParameters[6]; //mKCP Seed\Quic Key\Path
-
+            //MessageBox.Show(ReceiveConfigurationParameters[7]);
             TextBlockCurrentlySelectedPlanFakeWebsite.Text = ReceiveConfigurationParameters[7]; //伪装网站
 
             if (String.Equals(ReceiveConfigurationParameters[0], "TCP") == true
@@ -2979,10 +2979,16 @@ namespace ProxySU
             {
                 ReceiveConfigurationParameters[i] = "";
             }
-            if (string.IsNullOrEmpty(PreTrim(TextBoxTrojanHostDomain.Text)) == true)
+            bool preDomainMask = ClassModel.PreDomainMask(TextBoxTrojanSites.Text);
+            bool domainNotEmpty = ClassModel.TestDomainIsEmpty(TextBoxTrojanHostDomain.Text);
+            //if (string.IsNullOrEmpty(PreTrim(TextBoxTrojanHostDomain.Text)) == true)
+            //{
+            //    //****** "域名不能为空，请检查相关参数设置！" ******
+            //    MessageBox.Show(Application.Current.FindResource("MessageBoxShow_DomainNotEmpty").ToString());
+            //    return;
+            //}
+            if (domainNotEmpty == false || preDomainMask == false)
             {
-                //****** "域名不能为空，请检查相关参数设置！" ******
-                MessageBox.Show(Application.Current.FindResource("MessageBoxShow_DomainNotEmpty").ToString());
                 return;
             }
             //传递模板类型
@@ -2991,7 +2997,7 @@ namespace ProxySU
             //传递域名
             ReceiveConfigurationParameters[4] = PreTrim(TextBoxTrojanHostDomain.Text);
             //传递伪装网站
-            ReceiveConfigurationParameters[7] = DisguiseURLprocessing(PreTrim(TextBoxTrojanSites.Text));
+            ReceiveConfigurationParameters[7] = ClassModel.DisguiseURLprocessing(PreTrim(TextBoxTrojanSites.Text));
 
             //传递服务端口
             ReceiveConfigurationParameters[1] = "443";
@@ -3540,12 +3546,12 @@ namespace ProxySU
         //NaiveProxy一键安装开始传递参数
         private void ButtonNavieSetUp_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(PreTrim(TextBoxNaiveHostDomain.Text)) == true)
-            {
-                //****** "域名不能为空，请检查相关参数设置！" ******
-                MessageBox.Show(Application.Current.FindResource("MessageBoxShow_DomainNotEmpty").ToString());
-                return;
-            }
+            //if (string.IsNullOrEmpty(PreTrim(TextBoxNaiveHostDomain.Text)) == true)
+            //{
+            //    //****** "域名不能为空，请检查相关参数设置！" ******
+            //    MessageBox.Show(Application.Current.FindResource("MessageBoxShow_DomainNotEmpty").ToString());
+            //    return;
+            //}
 
             ConnectionInfo connectionInfo = GenerateConnectionInfo();
             if (connectionInfo == null)
@@ -3554,13 +3560,25 @@ namespace ProxySU
                 MessageBox.Show(Application.Current.FindResource("MessageBoxShow_ErrorHostConnection").ToString());
                 return;
             }
+            //清空参数空间
+            for (int i = 0; i != ReceiveConfigurationParameters.Length; i++)
 
+            {
+                ReceiveConfigurationParameters[i] = "";
+            }
+
+            bool preDomainMask = ClassModel.PreDomainMask(TextBoxNaiveSites.Text);
+            bool domainNotEmpty = ClassModel.TestDomainIsEmpty(TextBoxNaiveHostDomain.Text);
+            if (domainNotEmpty == false || preDomainMask == false)
+            {
+                return;
+            }
             //传递参数
             ReceiveConfigurationParameters[4] = PreTrim(TextBoxNaiveHostDomain.Text);//传递域名
             ReceiveConfigurationParameters[1] = "443";//传递端口
             ReceiveConfigurationParameters[3] = TextBoxNaiveUser.Text;//传递用户名
             ReceiveConfigurationParameters[2] = TextBoxNaivePassword.Text;//传递密码
-            ReceiveConfigurationParameters[7] = DisguiseURLprocessing(PreTrim(TextBoxNaiveSites.Text));//传递伪装网站
+            ReceiveConfigurationParameters[7] = ClassModel.DisguiseURLprocessing(PreTrim(TextBoxNaiveSites.Text));//传递伪装网站
 
             //启动布署进程
             installationDegree = 0;
@@ -3937,17 +3955,24 @@ namespace ProxySU
             {
                 ReceiveConfigurationParameters[i] = "";
             }
-            if (string.IsNullOrEmpty(PreTrim(TextBoxSSRHostDomain.Text)) == true)
+           
+            bool domainNotEmpty = ClassModel.TestDomainIsEmpty(TextBoxSSRHostDomain.Text);
+            bool preDomainMask = ClassModel.PreDomainMask(TextBoxSSRSites.Text);
+            if (domainNotEmpty == false || preDomainMask == false)
             {
-                //****** "域名不能为空，请检查相关参数设置！" ******
-                MessageBox.Show(Application.Current.FindResource("MessageBoxShow_DomainNotEmpty").ToString());
                 return;
             }
+            //if (string.IsNullOrEmpty(PreTrim(TextBoxSSRHostDomain.Text)) == true)
+            //{
+            //    //****** "域名不能为空，请检查相关参数设置！" ******
+            //    MessageBox.Show(Application.Current.FindResource("MessageBoxShow_DomainNotEmpty").ToString());
+            //    return;
+            //}
 
             //传递域名
             ReceiveConfigurationParameters[4] = PreTrim(TextBoxSSRHostDomain.Text);
             //传递伪装网站
-            ReceiveConfigurationParameters[7] = DisguiseURLprocessing(PreTrim(TextBoxSSRSites.Text));
+            ReceiveConfigurationParameters[7] = ClassModel.DisguiseURLprocessing(PreTrim(TextBoxSSRSites.Text));
 
             //传递服务端口
             ReceiveConfigurationParameters[1] = "443";
@@ -5261,23 +5286,26 @@ namespace ProxySU
         }
 
         //伪装网站处理
-        private string DisguiseURLprocessing(string fakeUrl)
-        {
-            //处理伪装网站域名中的前缀
-            if (fakeUrl.Length >= 7)
-            {
-                string testDomainMask = fakeUrl.Substring(0, 7);
-                if (String.Equals(testDomainMask, "https:/") || String.Equals(testDomainMask, "http://"))
-                {
-                    //MessageBox.Show(testDomain);
-                    string[] tmpUrl = fakeUrl.Split('/');
-                    //MainWindow.ReceiveConfigurationParameters[7] = TextBoxMaskSites.Text.Replace("/", "\\/");
-                    fakeUrl = tmpUrl[2];
-                }
+        //private string DisguiseURLprocessing(string fakeUrl)
+        //{
+            //var uri = new Uri(fakeUrl);
+            //return uri.Host;
 
-            }
-            return fakeUrl;
-        }
+            ////处理伪装网站域名中的前缀
+            //if (fakeUrl.Length >= 7)
+            //{
+            //    string testDomainMask = fakeUrl.Substring(0, 7);
+            //    if (String.Equals(testDomainMask, "https:/") || String.Equals(testDomainMask, "http://"))
+            //    {
+            //        //MessageBox.Show(testDomain);
+            //        string[] tmpUrl = fakeUrl.Split('/');
+            //        //MainWindow.ReceiveConfigurationParameters[7] = TextBoxMaskSites.Text.Replace("/", "\\/");
+            //        fakeUrl = tmpUrl[2];
+            //    }
+
+            //}
+            //return fakeUrl;
+       // }
 
         #region 检测系统内核是否符合安装要求
         //private static bool DetectKernelVersion(string kernelVer)
@@ -7254,9 +7282,11 @@ namespace ProxySU
         #region 测试用代码
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            saveShellScriptFileName = GenerateRandomScriptFileName(GenerateRandomStr(10));
+            string host = ClassModel.DisguiseURLprocessing("www.google.com/accout/");
+            MessageBox.Show(host);
+            //saveShellScriptFileName = GenerateRandomScriptFileName(GenerateRandomStr(10));
             //saveShellScriptFileName = "tmp." + saveShellScriptFileName + ".sh";
-            MessageBox.Show(saveShellScriptFileName);
+            //MessageBox.Show(saveShellScriptFileName);
             //var rand = System.Security.Cryptography.RandomNumberGenerator.Create();
             //byte[] bytes = new byte[8];
             //rand.GetBytes(bytes);

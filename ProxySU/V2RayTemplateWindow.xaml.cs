@@ -74,6 +74,7 @@ namespace ProxySU
         //传递所选择的参数与模板方案
         private void ButtondDecide_Click(object sender, RoutedEventArgs e)
         {
+            bool preDomainMask = ClassModel.PreDomainMask(TextBoxMaskSites.Text);
             bool domainNotEmpty = true;
 
             #region TCP 传输协议(VMESS)
@@ -103,7 +104,7 @@ namespace ProxySU
             //TCP+TLS模式被选中
             else if (RadioButtonTCP2TLS.IsChecked == true)
             {
-                domainNotEmpty = TestDomainIsEmpty();
+                domainNotEmpty = ClassModel.TestDomainIsEmpty(TextBoxDomain.Text);
 
                 //传递模板类型
                 MainWindow.ReceiveConfigurationParameters[0] = "tcpTLS";
@@ -135,7 +136,7 @@ namespace ProxySU
             //VLESS+TCP+XTLS+Web模式选中
             else if (RadioButtonVlessXtlsTcp.IsChecked == true)
             {
-                domainNotEmpty = TestDomainIsEmpty();
+                domainNotEmpty = ClassModel.TestDomainIsEmpty(TextBoxDomain.Text);
 
                 //传递模板类型
                 MainWindow.ReceiveConfigurationParameters[0] = "VlessXtlsTcp";
@@ -145,14 +146,14 @@ namespace ProxySU
                 //传递域名
                 MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomain.Text);
                 //传递伪装网站
-                MainWindow.ReceiveConfigurationParameters[7] = DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
+                MainWindow.ReceiveConfigurationParameters[7] = ClassModel.DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
 
             }
 
             //VLESS+TCP+TLS+Web模式选中
             else if (RadioButtonVlessTcpTlsWeb.IsChecked == true)
             {
-                domainNotEmpty = TestDomainIsEmpty();
+                domainNotEmpty = ClassModel.TestDomainIsEmpty(TextBoxDomain.Text);
     
                 //传递模板类型
                 MainWindow.ReceiveConfigurationParameters[0] = "VlessTcpTlsWeb";
@@ -162,14 +163,14 @@ namespace ProxySU
                 //传递域名
                 MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomain.Text);
                 //传递伪装网站
-                MainWindow.ReceiveConfigurationParameters[7] = DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
+                MainWindow.ReceiveConfigurationParameters[7] = ClassModel.DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
 
             }
 
             //VLESS+WebSocket+TLS+Web模式选中
             else if (RadioButtonVlessWebSocketTlsWeb.IsChecked == true)
             {
-                domainNotEmpty = TestDomainIsEmpty();
+                domainNotEmpty = ClassModel.TestDomainIsEmpty(TextBoxDomain.Text);
 
                 //传递模板类型
                 MainWindow.ReceiveConfigurationParameters[0] = "VlessWebSocketTlsWeb";
@@ -181,13 +182,13 @@ namespace ProxySU
                 //传递域名
                 MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomain.Text);
                 //传递伪装网站
-                MainWindow.ReceiveConfigurationParameters[7] = DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
+                MainWindow.ReceiveConfigurationParameters[7] = ClassModel.DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
             }
 
             //VLESS+http2+TLS+Web模式选中
             else if (RadioButtonVlessHttp2Web.IsChecked == true)
             {
-                domainNotEmpty = TestDomainIsEmpty();
+                domainNotEmpty = ClassModel.TestDomainIsEmpty(TextBoxDomain.Text);
 
                 //传递模板类型
                 MainWindow.ReceiveConfigurationParameters[0] = "VlessHttp2Web";
@@ -199,13 +200,13 @@ namespace ProxySU
                 //传递域名
                 MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomain.Text);
                 //传递伪装网站
-                MainWindow.ReceiveConfigurationParameters[7] = DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
+                MainWindow.ReceiveConfigurationParameters[7] = ClassModel.DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
             }
 
             //VLESS+VMESS+XTLS+TCP+WebSocket+Web模式被选中
             else if (RadioButtonVlessVmessXtlsTcpWebSocketHot.IsChecked == true)
             {
-                domainNotEmpty = TestDomainIsEmpty();
+                domainNotEmpty = ClassModel.TestDomainIsEmpty(TextBoxDomain.Text);
                 //传递模板类型
                 MainWindow.ReceiveConfigurationParameters[0] = "VlessVmessXtlsTcpWebSocketWeb";
                 //传递方案名称
@@ -220,7 +221,7 @@ namespace ProxySU
                 //传递混淆方式(VMESS TCP Path方式所用)
                 MainWindow.ReceiveConfigurationParameters[5] = "http";
                 //传递伪装网站
-                MainWindow.ReceiveConfigurationParameters[7] = DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
+                MainWindow.ReceiveConfigurationParameters[7] = ClassModel.DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
 
             }
 
@@ -241,7 +242,7 @@ namespace ProxySU
             //WebSocket+TLS模式被选中
             else if (RadioButtonWebSocketTLS.IsChecked == true)
             {
-                domainNotEmpty = TestDomainIsEmpty();
+                domainNotEmpty = ClassModel.TestDomainIsEmpty(TextBoxDomain.Text);
 
                 //传递模板类型
                 MainWindow.ReceiveConfigurationParameters[0] = "WebSocketTLS";
@@ -257,7 +258,7 @@ namespace ProxySU
             //WebSocket+TLS+Web模式被选中
             else if (RadioButtonWebSocketTLS2Web.IsChecked == true|| RadioButtonWebSocketTLS2WebHot.IsChecked==true)
             {
-                domainNotEmpty = TestDomainIsEmpty();
+                domainNotEmpty = ClassModel.TestDomainIsEmpty(TextBoxDomain.Text);
  
                 //传递模板类型
                 MainWindow.ReceiveConfigurationParameters[0] = "WebSocketTLS2Web";
@@ -269,7 +270,7 @@ namespace ProxySU
                 //传递域名
                 MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomain.Text);
                 //传递伪装网站
-                MainWindow.ReceiveConfigurationParameters[7] = DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
+                MainWindow.ReceiveConfigurationParameters[7] = ClassModel.DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
 
             }
             
@@ -295,7 +296,7 @@ namespace ProxySU
             //http2模式被选中
             else if (RadioButtonHTTP2.IsChecked == true)
             {
-                domainNotEmpty = TestDomainIsEmpty();
+                domainNotEmpty = ClassModel.TestDomainIsEmpty(TextBoxDomain.Text);
 
                 //传递模板类型
                 MainWindow.ReceiveConfigurationParameters[0] = "Http2";
@@ -312,7 +313,7 @@ namespace ProxySU
             //http2+TLS+Web模式被选中
             else if (RadioButtonHTTP2Web.IsChecked == true || RadioButtonHTTP2WebHot.IsChecked == true)
             {
-                domainNotEmpty = TestDomainIsEmpty();
+                domainNotEmpty = ClassModel.TestDomainIsEmpty(TextBoxDomain.Text);
 
                 //传递模板类型
                 MainWindow.ReceiveConfigurationParameters[0] = "http2Web";
@@ -324,7 +325,7 @@ namespace ProxySU
                 //传递域名
                 MainWindow.ReceiveConfigurationParameters[4] = PreTrim(TextBoxDomain.Text);
                 //传递伪装网站
-                MainWindow.ReceiveConfigurationParameters[7] = DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
+                MainWindow.ReceiveConfigurationParameters[7] = ClassModel.DisguiseURLprocessing(PreTrim(TextBoxMaskSites.Text));
 
             }
             
@@ -553,7 +554,7 @@ namespace ProxySU
                 MainWindow.mKCPvlessIsSet = false;
             }
                
-            if (domainNotEmpty)
+            if (domainNotEmpty == true && preDomainMask == true)
             {
                 this.Close();
             }
@@ -566,21 +567,25 @@ namespace ProxySU
 
         //伪装网站处理
         //DisguiseURLprocessing(string fakeUrl);
-        private string DisguiseURLprocessing(string fakeUrl)
-        {
-            //处理伪装网站域名中的前缀
-            if (fakeUrl.Length >= 7)
-            {
-                string testDomainMask = fakeUrl.Substring(0, 7);
-                if (String.Equals(testDomainMask, "https:/") || String.Equals(testDomainMask, "http://"))
-                {
-                    string[] tmpUrl = fakeUrl.Split('/');
-                    fakeUrl = tmpUrl[2];
-                }
+       // private string DisguiseURLprocessing(string fakeUrl)
+        //{
+            //var uri = new Uri(fakeUrl);
+            //return uri.Host;
+            //Console.WriteLine(uri.Host);
 
-            }
-            return fakeUrl;
-        }
+            ////处理伪装网站域名中的前缀
+            //if (fakeUrl.Length >= 7)
+            //{
+            //    string testDomainMask = fakeUrl.Substring(0, 7);
+            //    if (String.Equals(testDomainMask, "https:/") || String.Equals(testDomainMask, "http://"))
+            //    {
+            //        string[] tmpUrl = fakeUrl.Split('/');
+            //        fakeUrl = tmpUrl[2];
+            //    }
+
+            //}
+
+        //}
 
         #region 其他设置中的界面控制
 
@@ -1081,19 +1086,19 @@ namespace ProxySU
             return path;
         }
         //域名检测是否为空
-        private bool TestDomainIsEmpty()
-        {
-            if (string.IsNullOrEmpty(PreTrim(TextBoxDomain.Text)) == true)
-            {
-                //****** "域名不能为空，请检查相关参数设置！" ******
-                MessageBox.Show(Application.Current.FindResource("MessageBoxShow_DomainNotEmpty").ToString());
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
+        //private bool TestDomainIsEmpty()
+        //{
+        //    if (string.IsNullOrEmpty(PreTrim(TextBoxDomain.Text)) == true)
+        //    {
+        //        //****** "域名不能为空，请检查相关参数设置！" ******
+        //        MessageBox.Show(Application.Current.FindResource("MessageBoxShow_DomainNotEmpty").ToString());
+        //        return false;
+        //    }
+        //    else
+        //    {
+        //        return true;
+        //    }
+        //}
 
         //加密方法更改后的动作
         private void ComboBoxEncryptionMethodInfo_SelectionChanged(object sender, SelectionChangedEventArgs e)
