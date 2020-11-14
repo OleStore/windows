@@ -1104,7 +1104,8 @@ namespace ProxySU
                         //******"主机登录成功"******
                         SetUpProgressBarProcessing(3);
                         currentStatus = Application.Current.FindResource("DisplayInstallInfo_LoginSuccessful").ToString();
-                        MainWindowsShowInfo(currentStatus);                                                                                                                                 //Thread.Sleep(1000);
+                        MainWindowsShowInfo(currentStatus);
+                        //Thread.Sleep(3000);
                     }
 
                     //检测root权限 5--7
@@ -1316,7 +1317,7 @@ namespace ProxySU
         //    SetUpProgressBarProcessing(40);
         //    return true;
         //}
-
+        
         //生成V2Ray服务端配置 44--46
         //functionResult = GenerateServerConfiguration(client);
         //if (functionResult == false) { FunctionResultErr(); client.Disconnect(); return; }
@@ -1343,9 +1344,13 @@ namespace ProxySU
             //currentShellCommandResult = MainWindowsShowCmd(client, sshShellCommand);
 
             //备份原来的文件
+            //functionResult = FileCheckExists(client, @"/usr/local/etc/v2ray/config.json");
+            //if (functionResult == true)
+            //{
+
             sshShellCommand = @"mv /usr/local/etc/v2ray/config.json /usr/local/etc/v2ray/config.json.1";
             currentShellCommandResult = MainWindowsShowCmd(client, sshShellCommand);
-
+            //}
             //读取配置文件各个模块
             string logConfigJson = $"{pwdir}" + @"TemplateConfg\v2ray\server\00_log\00_log.json";
             string apiConfigJson = $"{pwdir}" + @"TemplateConfg\v2ray\server\01_api\01_api.json";
@@ -1538,8 +1543,7 @@ namespace ProxySU
 
                     //设置VLESS协议的回落端口，指向Caddy
                     if (String.Equals(ReceiveConfigurationParameters[0], "VlessTcpTlsWeb") == true
-                        || String.Equals(ReceiveConfigurationParameters[0], "VlessXtlsTcp") == true
-                        || String.Equals(ReceiveConfigurationParameters[0], "VlessVmessXtlsTcpWebSocketWeb") == true)
+                        || String.Equals(ReceiveConfigurationParameters[0], "VlessXtlsTcp") == true)
                     {
                         //设置Caddy随机监听的端口
                         randomCaddyListenPort = GetRandomPort();
@@ -1547,14 +1551,19 @@ namespace ProxySU
                         //指向Caddy监听的随机端口
                         jObjectJson["inbounds"][0]["settings"]["fallbacks"][0]["dest"] = randomCaddyListenPort;
                     }
-
-                    //
+                    //设置VLESS+VMESS+Trojan+XTLS+TCP+WebSocket+Web协议
                     if (String.Equals(ReceiveConfigurationParameters[0], "VlessVmessXtlsTcpWebSocketWeb") == true)
                     {
+                        //设置Caddy随机监听的端口
+                        randomCaddyListenPort = GetRandomPort();
+
+                        //指向Caddy监听的随机端口
+                        jObjectJson["inbounds"][1]["settings"]["fallbacks"][0]["dest"] = randomCaddyListenPort;
                         //设置其他模式的UUID
-                        jObjectJson["inbounds"][1]["settings"]["clients"][0]["id"] = ReceiveConfigurationParameters[2];
+                        jObjectJson["inbounds"][1]["settings"]["clients"][0]["password"] = ReceiveConfigurationParameters[2];
                         jObjectJson["inbounds"][2]["settings"]["clients"][0]["id"] = ReceiveConfigurationParameters[2];
                         jObjectJson["inbounds"][3]["settings"]["clients"][0]["id"] = ReceiveConfigurationParameters[2];
+                        jObjectJson["inbounds"][4]["settings"]["clients"][0]["id"] = ReceiveConfigurationParameters[2];
 
                         //设置Vless回落与分流的Path
                         jObjectJson["inbounds"][0]["settings"]["fallbacks"][1]["path"] = ReceiveConfigurationParameters[3];
@@ -1562,11 +1571,11 @@ namespace ProxySU
                         jObjectJson["inbounds"][0]["settings"]["fallbacks"][3]["path"] = ReceiveConfigurationParameters[6];
 
                         //设置Vless ws Path
-                        jObjectJson["inbounds"][1]["streamSettings"]["wsSettings"]["path"] = ReceiveConfigurationParameters[3];
+                        jObjectJson["inbounds"][2]["streamSettings"]["wsSettings"]["path"] = ReceiveConfigurationParameters[3];
                         //设置Vmess tcp Path
-                        jObjectJson["inbounds"][2]["streamSettings"]["tcpSettings"]["header"]["request"]["path"][0] = ReceiveConfigurationParameters[9];
+                        jObjectJson["inbounds"][3]["streamSettings"]["tcpSettings"]["header"]["request"]["path"][0] = ReceiveConfigurationParameters[9];
                         //设置Vmess ws Path
-                        jObjectJson["inbounds"][3]["streamSettings"]["wsSettings"]["path"] = ReceiveConfigurationParameters[6];
+                        jObjectJson["inbounds"][4]["streamSettings"]["wsSettings"]["path"] = ReceiveConfigurationParameters[6];
 
                     }
 
@@ -1939,8 +1948,8 @@ namespace ProxySU
                 {
                     //复合方案所需要的配置文件
                     //VLESS over TCP with XTLS模式
-                    string outboundsConfigJsonVlessXtls = $"{pwdir}" + @"TemplateConfg\v2ray\client\06_outbounds\vless_tcp_xtls_client_config.json";
-                    using (StreamReader readerJson = File.OpenText(outboundsConfigJsonVlessXtls))
+                    string outboundsConfigJsons = $"{pwdir}" + @"TemplateConfg\v2ray\client\06_outbounds\vless_tcp_xtls_client_config.json";
+                    using (StreamReader readerJson = File.OpenText(outboundsConfigJsons))
                     {
                         JObject jObjectJson = (JObject)JToken.ReadFrom(new JsonTextReader(readerJson));
 
@@ -1961,8 +1970,8 @@ namespace ProxySU
                     }
 
                     //VLESS over TCP with TLS模式
-                    string outboundsConfigJsonVlessTcpTls = $"{pwdir}" + @"TemplateConfg\v2ray\client\06_outbounds\vless_tcp_tls_caddy_cilent_config.json";
-                    using (StreamReader readerJson = File.OpenText(outboundsConfigJsonVlessTcpTls))
+                    outboundsConfigJsons = $"{pwdir}" + @"TemplateConfg\v2ray\client\06_outbounds\vless_tcp_tls_caddy_cilent_config.json";
+                    using (StreamReader readerJson = File.OpenText(outboundsConfigJsons))
                     {
                         JObject jObjectJson = (JObject)JToken.ReadFrom(new JsonTextReader(readerJson));
 
@@ -1983,8 +1992,8 @@ namespace ProxySU
                     }
 
                     //VLESS over WS with TLS 模式
-                    string outboundsConfigJsonVlessWsTls = $"{pwdir}" + @"TemplateConfg\v2ray\client\06_outbounds\vless_ws_tls_client_config.json";
-                    using (StreamReader readerJson = File.OpenText(outboundsConfigJsonVlessWsTls))
+                    outboundsConfigJsons = $"{pwdir}" + @"TemplateConfg\v2ray\client\06_outbounds\vless_ws_tls_client_config.json";
+                    using (StreamReader readerJson = File.OpenText(outboundsConfigJsons))
                     {
                         JObject jObjectJson = (JObject)JToken.ReadFrom(new JsonTextReader(readerJson));
 
@@ -2006,8 +2015,8 @@ namespace ProxySU
                     }
 
                     //VMess over TCP with TLS模式
-                    string outboundsConfigJsonVmessTcpTls = $"{pwdir}" + @"TemplateConfg\v2ray\client\06_outbounds\vmess_tcp_tls_client_config.json";
-                    using (StreamReader readerJson = File.OpenText(outboundsConfigJsonVmessTcpTls))
+                    outboundsConfigJsons = $"{pwdir}" + @"TemplateConfg\v2ray\client\06_outbounds\vmess_tcp_tls_client_config.json";
+                    using (StreamReader readerJson = File.OpenText(outboundsConfigJsons))
                     {
                         JObject jObjectJson = (JObject)JToken.ReadFrom(new JsonTextReader(readerJson));
 
@@ -2029,8 +2038,8 @@ namespace ProxySU
                     }
 
                     //VMess over WS with TLS模式
-                    string outboundsConfigJsonVmessWsTls = $"{pwdir}" + @"TemplateConfg\v2ray\client\06_outbounds\WebSocketTLSWeb_client_config.json";
-                    using (StreamReader readerJson = File.OpenText(outboundsConfigJsonVmessWsTls))
+                    outboundsConfigJsons = $"{pwdir}" + @"TemplateConfg\v2ray\client\06_outbounds\WebSocketTLSWeb_client_config.json";
+                    using (StreamReader readerJson = File.OpenText(outboundsConfigJsons))
                     {
                         JObject jObjectJson = (JObject)JToken.ReadFrom(new JsonTextReader(readerJson));
 
@@ -2046,6 +2055,29 @@ namespace ProxySU
                             Directory.CreateDirectory(@"v2ray_config\vmess_ws_tls_client_config");//创建该文件夹　　   
                         }
                         using (StreamWriter sw = new StreamWriter(@"v2ray_config\vmess_ws_tls_client_config\config.json"))
+                        {
+                            sw.Write(clientJson.ToString());
+                        }
+                    }
+
+                    //Trojan over TCP with TLS模式
+                    outboundsConfigJsons = $"{pwdir}" + @"TemplateConfg\v2ray\client\06_outbounds\trojan_tcp_tls.json";
+                    using (StreamReader readerJson = File.OpenText(outboundsConfigJsons))
+                    {
+                        JObject jObjectJson = (JObject)JToken.ReadFrom(new JsonTextReader(readerJson));
+
+                        //设置客户端的地址/端口/id
+                        jObjectJson["outbounds"][0]["settings"]["servers"][0]["address"] = ReceiveConfigurationParameters[4];
+                        jObjectJson["outbounds"][0]["settings"]["servers"][0]["port"] = int.Parse(ReceiveConfigurationParameters[1]);
+                        jObjectJson["outbounds"][0]["settings"]["servers"][0]["password"] = ReceiveConfigurationParameters[2];
+                        jObjectJson["outbounds"][0]["streamSettings"]["tlsSettings"]["serverName"] = ReceiveConfigurationParameters[4];
+
+                        clientJson["outbounds"] = jObjectJson["outbounds"];
+                        if (!Directory.Exists(@"v2ray_config\trojan_tcp_tls_client_config"))//如果不存在就创建file文件夹　　             　　              
+                        {
+                            Directory.CreateDirectory(@"v2ray_config\trojan_tcp_tls_client_config");//创建该文件夹　　   
+                        }
+                        using (StreamWriter sw = new StreamWriter(@"v2ray_config\trojan_tcp_tls_client_config\config.json"))
                         {
                             sw.Write(clientJson.ToString());
                         }
@@ -5457,6 +5489,7 @@ namespace ProxySU
             getYum = false;
 
             //******"正在登录远程主机......"******
+            SetUpProgressBarProcessing(1);
             currentStatus = Application.Current.FindResource("DisplayInstallInfo_Login").ToString();
             MainWindowsShowInfo(currentStatus);
 
@@ -5496,6 +5529,7 @@ namespace ProxySU
                     if (client.IsConnected == true)
                     {
                         //******"主机登录成功"******
+                        SetUpProgressBarProcessing(5);
                         currentStatus = Application.Current.FindResource("DisplayInstallInfo_LoginSuccessful").ToString();
                         MainWindowsShowInfo(currentStatus);
                     }
@@ -5675,7 +5709,9 @@ namespace ProxySU
                         SetUpProgressBarProcessing(5);
                         currentStatus = Application.Current.FindResource("DisplayInstallInfo_LoginSuccessful").ToString();
                         MainWindowsShowInfo(currentStatus);
+                        //Thread.Sleep(3000);
                     }
+
 
                     //检测root权限 5--7
                     functionResult = RootAuthorityDetect(client);
@@ -7282,8 +7318,8 @@ namespace ProxySU
         #region 测试用代码
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string host = ClassModel.DisguiseURLprocessing("www.google.com/accout/");
-            MessageBox.Show(host);
+            //string host = ClassModel.DisguiseURLprocessing("www.google.com/accout/");
+            //MessageBox.Show(host);
             //saveShellScriptFileName = GenerateRandomScriptFileName(GenerateRandomStr(10));
             //saveShellScriptFileName = "tmp." + saveShellScriptFileName + ".sh";
             //MessageBox.Show(saveShellScriptFileName);
@@ -7293,9 +7329,9 @@ namespace ProxySU
             //string randStr = Convert.ToBase64String(bytes);
             //randStr = randStr.Replace("+","").Replace("/", "").Replace("=","");
             //MessageBox.Show(randStr);
-            //proxyType = "TrojanGo";
-            //ResultClientInformation resultClientInformation = new ResultClientInformation();
-            //resultClientInformation.ShowDialog();
+            proxyType = "V2Ray";
+            ResultClientInformation resultClientInformation = new ResultClientInformation();
+            resultClientInformation.ShowDialog();
             //return;
             //string pwdir = AppDomain.CurrentDomain.BaseDirectory;
             //MessageBox.Show(pwdir);
@@ -7437,16 +7473,18 @@ namespace ProxySU
                 MainWindowsShowInfo(currentStatus);
                 //string[] dns64 = new string[2];
                 var dns64 = FilterFastestIP(client);
-
-                //****** "当前主机最快的Nat64网关为:" ******
-                //currentStatus = Application.Current.FindResource("DisplayInstallInfo_FindFastestNat64AsIs").ToString();
-                //MainWindowsShowInfo(currentStatus);
-
-                //currentStatus = dns64[0];
-                //MainWindowsShowInfo(currentStatus);
-                //currentStatus = dns64[1];
-                //MainWindowsShowInfo(currentStatus);
-
+               
+                if (functionResult == false)
+                {
+                    //****** "未能找到有效的Nat64网关......" ******
+                    currentStatus = Application.Current.FindResource("DisplayInstallInfo_FindFastestSetUpNat64Failed").ToString();
+                    MainWindowsShowInfo(currentStatus);
+                    MessageBox.Show(currentStatus);
+                    FunctionResultErr();
+                    client.Disconnect();
+                    return false;
+                }
+               
                 //****** "正在设置Nat64网关......" ******
                 currentStatus = Application.Current.FindResource("DisplayInstallInfo_SetUpNat64").ToString();
                 MainWindowsShowInfo(currentStatus);
@@ -7506,11 +7544,11 @@ namespace ProxySU
                 "2a00:1098:2c::1",
                 "2a09:11c0:100::53",
             };
-            
+
             List<NatDns64> NatDns64s = new List<NatDns64>();
             foreach (string gateip in gateNat64)
             {
-                sshShellCommand = $"ping -c4 {gateip} | grep avg | awk '{{print $4}}'|cut -d/ -f2";
+                sshShellCommand = $"ping6 -c4 {gateip} | grep avg | awk '{{print $4}}'|cut -d/ -f2";
                 currentShellCommandResult = MainWindowsShowCmd(client, sshShellCommand);
                 if (String.IsNullOrEmpty(currentShellCommandResult) != true)
                 {
@@ -7526,6 +7564,16 @@ namespace ProxySU
             }
             NatDns64s = NatDns64s.OrderBy(o => o.Avg).ToList();
             int listCount = NatDns64s.Count;
+            currentStatus = listCount.ToString() + " NAT64 gateways are valid";
+            MainWindowsShowInfo(currentStatus);
+            if (listCount < 1)
+            {
+                functionResult = false;
+            }
+            else
+            {
+                functionResult = true;
+            }
             string[] returnstr = new string[listCount];
             for(int i=0;i<listCount;i++)
             {
@@ -7615,6 +7663,15 @@ namespace ProxySU
         //if (functionResult == false) { FunctionResultErr(); client.Disconnect(); return; }
         private bool RootAuthorityDetect(SshClient client)
         {
+            sshShellCommand = @"uname -a";
+            currentShellCommandResult = MainWindowsShowCmd(client, sshShellCommand);
+            //禁止一些可能产生的干扰信息
+            sshShellCommand = @"sed -i 's/echo/#echo/g' ~/.bashrc";
+            currentShellCommandResult = MainWindowsShowCmd(client, sshShellCommand);
+
+            sshShellCommand = @"sed -i 's/echo/#echo/g' ~/.profile";
+            currentShellCommandResult = MainWindowsShowCmd(client, sshShellCommand);
+
             //******"检测是否运行在root权限下..."******01
             SetUpProgressBarProcessing(5);
             currentStatus = Application.Current.FindResource("DisplayInstallInfo_DetectionRootPermission").ToString();

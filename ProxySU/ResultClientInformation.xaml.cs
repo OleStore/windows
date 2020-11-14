@@ -32,6 +32,21 @@ namespace ProxySU
         private static string configDomainSavePath = "";
         private static string server = MainWindow.ReceiveConfigurationParameters[4];
 
+        private static string TextBoxURLDefault;
+        private static string TextBoxURLVlessTcp;
+        private static string TextBoxURLVlessWs;
+        private static string TextBoxURLVmessTcp;
+        private static string TextBoxURLVmessWs;
+        private static string TextBoxURLTrojanTcp;
+
+        private static BitmapSource ImageShareQRcodeDefault;
+        private static BitmapSource ImageShareQRcodeVlessTcp;
+        private static BitmapSource ImageShareQRcodeVlessWs;
+        private static BitmapSource ImageShareQRcodeVmessTcp;
+        private static BitmapSource ImageShareQRcodeVmessWs;
+        private static BitmapSource ImageShareQRcodeTrojanTcp;
+      
+
         [DllImport("user32.dll")]
         private static extern int MessageBoxTimeoutA(IntPtr hWnd, string msg, string Caps, int type, int Id, int time);   //引用DLL
  
@@ -56,7 +71,7 @@ namespace ProxySU
                 TextBoxHostAddress.Text = MainWindow.ReceiveConfigurationParameters[4];
                 //主机端口
                 TextBoxPort.Text = MainWindow.ReceiveConfigurationParameters[1];
-                //用户ID(uuid)
+                //用户ID(uuid)/Trojan密码
                 TextBoxUUID.Text = MainWindow.ReceiveConfigurationParameters[2];
                 //额外ID
                 TextBoxUUIDextra.Text = "0";
@@ -79,6 +94,8 @@ namespace ProxySU
 
                 //初始化时，隐藏多方案客户端选择面板
                 GroupBoxSelectVlessVmessXtlsTcpWs.Visibility = Visibility.Collapsed;
+                //显示非Trojan的所有参数
+                GridNotTrojanParameters.Visibility = Visibility.Visible;
 
                 if (String.Equals(MainWindow.ReceiveConfigurationParameters[0], "VlessVmessXtlsTcpWebSocketWeb") == false)
                 {
@@ -343,6 +360,7 @@ namespace ProxySU
                 }
                 else
                 {
+                    //显示多方案客户端选择面板
                     GroupBoxSelectVlessVmessXtlsTcpWs.Visibility = Visibility.Visible;
 
                     string proxyfolder = CheckDir("v2ray_config");
@@ -363,6 +381,7 @@ namespace ProxySU
                     V2raySetVmessWsTls();
                     GenerateV2rayVmessWsTlsShareQRcodeAndBase64Url();
 
+                    GenerateV2rayTrojanShareQRcodeAndBase64Url();
                     RadioButtonVlessTcpXtls.IsChecked = true;
                 }
 
@@ -688,10 +707,13 @@ namespace ProxySU
         //设置VLESS over TCP with XTLS
         private void V2raySetVlessTcpXtls()
         {
+            GridNotTrojanParameters.Visibility = Visibility.Visible;
             TextBlockVmessOrVless.Text = Application.Current.FindResource("TabItemHeaderV2RayVlessProtocol").ToString();
             TextBlockVmessOrVless.Visibility = Visibility.Visible;
             //隐藏下面的二维码显示
             HideGroupBoxClientQRandURL();
+            //ImageShareQRcode.Source = ImageShareQRcodeDefault;
+            //TextBoxURL.Text = TextBoxURLDefault;
 
             TextBoxEncryption.Text = "none";
             TextBoxTransmission.Text = "tcp";
@@ -704,15 +726,19 @@ namespace ProxySU
             ShowPathV2ray();
             TextBoxQuicKeyMkcpSeedPath.Text = "";
 
+
         }
 
         //设置VLESS over TCP with TLS
         private void V2raySetVlessTcpTls()
         {
+            GridNotTrojanParameters.Visibility = Visibility.Visible;
             TextBlockVmessOrVless.Text = Application.Current.FindResource("TabItemHeaderV2RayVlessProtocol").ToString();
             TextBlockVmessOrVless.Visibility = Visibility.Visible;
             //隐藏下面的二维码显示
             HideGroupBoxClientQRandURL();
+            //TextBoxURL.Text = TextBoxURLVlessTcp;
+            //ImageShareQRcode.Source = ImageShareQRcodeVlessTcp;
 
             TextBoxEncryption.Text = "none";
             TextBoxTransmission.Text = "tcp";
@@ -729,10 +755,13 @@ namespace ProxySU
         //设置VLESS over WS with TLS
         private void V2raySetVlessWsTls()
         {
+            GridNotTrojanParameters.Visibility = Visibility.Visible;
             TextBlockVmessOrVless.Text = Application.Current.FindResource("TabItemHeaderV2RayVlessProtocol").ToString();
             TextBlockVmessOrVless.Visibility = Visibility.Visible;
             //隐藏下面的二维码显示
             HideGroupBoxClientQRandURL();
+            //TextBoxURL.Text = TextBoxURLVlessWs;
+            //ImageShareQRcode.Source = ImageShareQRcodeVlessWs;
 
             TextBoxEncryption.Text = "none";
             TextBoxTransmission.Text = "ws";
@@ -750,6 +779,7 @@ namespace ProxySU
         //设置VMess over TCP with TLS
         private void V2raySetVmessTcpTls()
         {
+            GridNotTrojanParameters.Visibility = Visibility.Visible;
             TextBoxEncryption.Text = "none";
             TextBoxTransmission.Text = "tcp";
             TextBoxCamouflageType.Text = "http";
@@ -764,11 +794,14 @@ namespace ProxySU
             //显示下面的二维码显示。
             //HideGroupBoxClientQRandURL();
             ShowGroupBoxClientQRandURL();
+            TextBoxURL.Text = TextBoxURLVmessTcp;
+            ImageShareQRcode.Source = ImageShareQRcodeVmessTcp;
         }
 
         //设置VMess over WS with TLS
         private void V2raySetVmessWsTls()
         {
+            GridNotTrojanParameters.Visibility = Visibility.Visible;
             TextBoxEncryption.Text = "none";
             TextBoxTransmission.Text = "ws";
             TextBoxCamouflageType.Text = "none";
@@ -781,6 +814,19 @@ namespace ProxySU
             TextBoxQuicKeyMkcpSeedPath.Text = MainWindow.ReceiveConfigurationParameters[6];
             TextBlockVmessOrVless.Visibility = Visibility.Collapsed;
             ShowGroupBoxClientQRandURL();
+            TextBoxURL.Text = TextBoxURLVmessWs;
+            ImageShareQRcode.Source = ImageShareQRcodeVmessWs;
+        }
+
+        //设置Trojan over TCP with TLS
+        private void V2raySetTrojanTcpTls()
+        {
+            //隐藏所有不是Trojan的参数
+            GridNotTrojanParameters.Visibility = Visibility.Collapsed;
+            //显示下面的二维码与分享链接
+            ShowGroupBoxClientQRandURL();
+            TextBoxURL.Text = TextBoxURLTrojanTcp;
+            ImageShareQRcode.Source = ImageShareQRcodeTrojanTcp;
         }
         #endregion
 
@@ -842,6 +888,44 @@ namespace ProxySU
 
         }
 
+        //显示加密方式
+        private void ShowEncryption()
+        {
+            TextBlockEncryption.Visibility = Visibility.Visible;
+            TextBoxEncryption.Visibility = Visibility.Visible;
+        }
+        //隐藏加密方式
+        private void HideEncryption()
+        {
+            TextBlockEncryption.Visibility = Visibility.Collapsed;
+            TextBoxEncryption.Visibility = Visibility.Collapsed;
+        }
+
+        //显示传输协议
+        private void ShowTransferProtocol()
+        {
+            TextBlockTransferProtocol.Visibility = Visibility.Visible;
+            TextBoxTransmission.Visibility = Visibility.Visible;
+        }
+        //隐藏传输协议
+        private void HideTransferProtocol()
+        {
+            TextBlockTransferProtocol.Visibility = Visibility.Collapsed;
+            TextBoxTransmission.Visibility = Visibility.Collapsed;
+        }
+        //显示伪装类型
+        private void ShowTextBlockCamouflageType()
+        {
+            TextBlockCamouflageType.Visibility = Visibility.Visible;
+            TextBoxCamouflageType.Visibility = Visibility.Visible;
+        }
+        //隐藏伪装类型
+        private void HideTextBlockCamouflageType()
+        {
+            TextBlockCamouflageType.Visibility = Visibility.Collapsed;
+            TextBoxCamouflageType.Visibility = Visibility.Collapsed;
+        }
+
         //显示二维码与链接分享
         private void ShowGroupBoxClientQRandURL()
         {
@@ -877,6 +961,11 @@ namespace ProxySU
         private void RadioButtonVmessWsTls_Checked(object sender, RoutedEventArgs e)
         {
             V2raySetVmessWsTls();
+        }
+
+        private void RadioButtonTrojanTcpTls_Checked(object sender, RoutedEventArgs e)
+        {
+            V2raySetTrojanTcpTls();
         }
         #endregion
 
@@ -1303,19 +1392,17 @@ namespace ProxySU
 
 
             //生成二维码与URL，跳过VlessTcpTlsWeb暂时未有URL标准
-            //string vmessUrl = "vmess://" + ToBase64Encode(v2rayNjsonObject.ToString());
-            //TextBoxURL.Text = vmessUrl;
+            //TextBoxURLDefault = "vmess://" + ToBase64Encode(v2rayNjsonObject.ToString());
+            //TextBoxURL.Text = TextBoxURLDefault;
             //using (StreamWriter sw = new StreamWriter($"{configSavePath}\\url.txt"))
             //{
-            //    if (String.Equals(MainWindow.ReceiveConfigurationParameters[0], "VlessTcpTlsWeb") == false)
-            //    {
-            //        sw.WriteLine(vmessUrl);
-            //    }
+
+            //        sw.WriteLine(TextBoxURLDefault);
+
             //}
-            //if (String.Equals(MainWindow.ReceiveConfigurationParameters[0], "VlessTcpTlsWeb") == false)
-            //{
-            //    ImageShareQRcode.Source = CreateQRCode(vmessUrl, $"v2ray_config\\{saveFileFolder}\\QR.bmp");
-            //}
+
+            //   ImageShareQRcodeDefault = CreateQRCode(TextBoxURLDefault, $"v2ray_config\\{saveFileFolder}\\QR.bmp");
+            // ImageShareQRcode.Source = ImageShareQRcodeDefault;
 
 
             if (File.Exists($"v2ray_config\\{plainSavePath}\\config.json"))
@@ -1442,19 +1529,17 @@ namespace ProxySU
 
 
             //生成二维码与URL，跳过VlessTcpTlsWeb暂时未有URL标准
-            //string vmessUrl = "vmess://" + ToBase64Encode(v2rayNjsonObject.ToString());
-            //TextBoxURL.Text = vmessUrl;
+            //TextBoxURLVlessTcp = "vmess://" + ToBase64Encode(v2rayNjsonObject.ToString());
+            //TextBoxURL.Text = TextBoxURLVlessTcp;
             //using (StreamWriter sw = new StreamWriter($"{configSavePath}\\url.txt"))
             //{
-            //    if (String.Equals(MainWindow.ReceiveConfigurationParameters[0], "VlessTcpTlsWeb") == false)
-            //    {
-            //        sw.WriteLine(vmessUrl);
-            //    }
+
+            //        sw.WriteLine(TextBoxURLVlessTcp);
+
             //}
-            //if (String.Equals(MainWindow.ReceiveConfigurationParameters[0], "VlessTcpTlsWeb") == false)
-            //{
-            //    ImageShareQRcode.Source = CreateQRCode(vmessUrl, $"v2ray_config\\{saveFileFolder}\\QR.bmp");
-            //}
+
+            //   ImageShareQRcodeVlessTcp = CreateQRCode(TextBoxURLVlessTcp, $"v2ray_config\\{saveFileFolder}\\QR.bmp");
+            //  ImageShareQRcode.Source = ImageShareQRcodeVlessTcp;
 
 
             if (File.Exists($"v2ray_config\\{plainSavePath}\\config.json"))
@@ -1581,19 +1666,17 @@ namespace ProxySU
 
 
             //生成二维码与URL，跳过VlessTcpTlsWeb暂时未有URL标准
-            //string vmessUrl = "vmess://" + ToBase64Encode(v2rayNjsonObject.ToString());
-            //TextBoxURL.Text = vmessUrl;
+            //TextBoxURLVlessWs = "vmess://" + ToBase64Encode(v2rayNjsonObject.ToString());
+            //TextBoxURL.Text = TextBoxURLVlessWs;
             //using (StreamWriter sw = new StreamWriter($"{configSavePath}\\url.txt"))
             //{
-            //    if (String.Equals(MainWindow.ReceiveConfigurationParameters[0], "VlessTcpTlsWeb") == false)
-            //    {
-            //        sw.WriteLine(vmessUrl);
-            //    }
+
+            //        sw.WriteLine(TextBoxURLVlessWs);
+
             //}
-            //if (String.Equals(MainWindow.ReceiveConfigurationParameters[0], "VlessTcpTlsWeb") == false)
-            //{
-            //    ImageShareQRcode.Source = CreateQRCode(vmessUrl, $"v2ray_config\\{saveFileFolder}\\QR.bmp");
-            //}
+
+            // ImageShareQRcodeVlessWs = CreateQRCode(TextBoxURLVlessWs, $"v2ray_config\\{saveFileFolder}\\QR.bmp");
+            //ImageShareQRcode.Source = ImageShareQRcodeVlessWs;
 
 
             if (File.Exists($"v2ray_config\\{plainSavePath}\\config.json"))
@@ -1710,15 +1793,15 @@ namespace ProxySU
 
 
             //生成二维码与URL，跳过VlessTcpTlsWeb暂时未有URL标准
-            string vmessUrl = "vmess://" + ToBase64Encode(v2rayNjsonObject.ToString());
-            TextBoxURL.Text = vmessUrl;
+            TextBoxURLVmessTcp = "vmess://" + ToBase64Encode(v2rayNjsonObject.ToString());
+            //TextBoxURL.Text = TextBoxURLVmessTcp;
             using (StreamWriter sw = new StreamWriter($"{configSavePath}\\url.txt"))
             {
-                sw.WriteLine(vmessUrl);
+                sw.WriteLine(TextBoxURLVmessTcp);
             }
 
-            ImageShareQRcode.Source = CreateQRCode(vmessUrl, $"{configSavePath}\\QR.bmp");
-
+            ImageShareQRcodeVmessTcp = CreateQRCode(TextBoxURLVmessTcp, $"{configSavePath}\\QR.bmp");
+            //ImageShareQRcode.Source = ImageShareQRcodeVmessTcp;
 
 
             if (File.Exists($"v2ray_config\\{plainSavePath}\\config.json"))
@@ -1730,48 +1813,6 @@ namespace ProxySU
             using (StreamWriter sw = new StreamWriter($"{configSavePath}\\readme.txt"))
             {
                 ReadmeTxtWriteGenerate(sw);
-                //sw.WriteLine("config.json");
-                ////****** "此文件为v2ray官方程序所使用的客户端配置文件，配置为全局模式，socks5地址：127.0.0.1:1080，http代理地址：127.0.0.1:1081" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine01").ToString());
-
-                ////****** "v2ray官方网站：https://www.v2ray.com/" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine02").ToString());
-
-                ////****** "v2ray官方程序下载地址：https://github.com/v2ray/v2ray-core/releases" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine03").ToString());
-
-                ////****** "下载相应版本，Windows选择v2ray-windows-64.zip或者v2ray-windows-32.zip，解压后提取v2ctl.exe和v2ray.exe。与config.json放在同一目录，运行v2ray.exe即可。" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine04").ToString());
-
-                //sw.WriteLine("-----------------------------------------");
-                //sw.WriteLine("QR.bmp");
-
-                ////******"此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" * *****
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine05").ToString());
-
-                ////****** "v2rayN下载网址：https://github.com/2dust/v2rayN/releases" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine06").ToString());
-
-                ////****** "Qv2ray：https://github.com/Qv2ray/Qv2ray/releases" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine07").ToString());
-
-                ////****** "v2rayNG(Android)下载网址：https://github.com/2dust/v2rayNG/releases" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine08").ToString());
-
-                ////****** "v2rayNG(Android)在Google Play下载网址：https://play.google.com/store/apps/details?id=com.v2ray.ang" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine09").ToString());
-
-                ////****** "Shadowrocket(ios)下载,需要使用国外区的AppleID。请自行谷歌方法。" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine10").ToString());
-
-                //sw.WriteLine("-----------------------------------------");
-                //sw.WriteLine("url.txt");
-
-                ////******"此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" * *****
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine11").ToString());
-
-                ////写入通用配置参数--
-                //TxtWriteGeneralParameters(sw);
 
             }
         }
@@ -1834,20 +1875,17 @@ namespace ProxySU
 
 
             //生成二维码与URL，跳过VlessTcpTlsWeb暂时未有URL标准
-            string vmessUrl = "vmess://" + ToBase64Encode(v2rayNjsonObject.ToString());
-            TextBoxURL.Text = vmessUrl;
+            TextBoxURLVmessWs = "vmess://" + ToBase64Encode(v2rayNjsonObject.ToString());
+            //TextBoxURL.Text = TextBoxURLVmessWs;
             using (StreamWriter sw = new StreamWriter($"{configSavePath}\\url.txt"))
             {
-                //if (String.Equals(MainWindow.ReceiveConfigurationParameters[0], "VlessTcpTlsWeb") == false)
-               // {
-                    sw.WriteLine(vmessUrl);
-               // }
-            }
-           // if (String.Equals(MainWindow.ReceiveConfigurationParameters[0], "VlessTcpTlsWeb") == false)
-           // {
-                ImageShareQRcode.Source = CreateQRCode(vmessUrl, $"{configSavePath}\\QR.bmp");
-            //}
 
+                sw.WriteLine(TextBoxURLVmessWs);
+
+            }
+
+            ImageShareQRcodeVmessWs = CreateQRCode(TextBoxURLVmessWs, $"{configSavePath}\\QR.bmp");
+            //ImageShareQRcode.Source = ImageShareQRcodeVmessWs;
 
             if (File.Exists($"v2ray_config\\{plainSavePath}\\config.json"))
             {
@@ -1858,50 +1896,101 @@ namespace ProxySU
             using (StreamWriter sw = new StreamWriter($"{configSavePath}\\readme.txt"))
             {
                 ReadmeTxtWriteGenerate(sw);
-                //sw.WriteLine("config.json");
-                ////****** "此文件为v2ray官方程序所使用的客户端配置文件，配置为全局模式，socks5地址：127.0.0.1:1080，http代理地址：127.0.0.1:1081" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine01").ToString());
+               
+            }
+        }
 
-                ////****** "v2ray官方网站：https://www.v2ray.com/" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine02").ToString());
+        //生成Trojan over TCP with TLS的配置保存
+        private void GenerateV2rayTrojanShareQRcodeAndBase64Url()
+        {
+            //创建保存目录
+            string plainSavePath = @"trojan_tcp_tls_client_config";
+            string configSavePath = CheckDir($"{configDomainSavePath}\\{plainSavePath}");
 
-                ////****** "v2ray官方程序下载地址：https://github.com/v2ray/v2ray-core/releases" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine03").ToString());
+            TextBoxURLTrojanTcp = $"trojan://{TextBoxUUID.Text}@{TextBoxHostAddress.Text}:{TextBoxPort.Text}#{TextBoxHostAddress.Text}";
 
-                ////****** "下载相应版本，Windows选择v2ray-windows-64.zip或者v2ray-windows-32.zip，解压后提取v2ctl.exe和v2ray.exe。与config.json放在同一目录，运行v2ray.exe即可。" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine04").ToString());
-
-                //sw.WriteLine("-----------------------------------------");
-                //sw.WriteLine("QR.bmp");
-
-                ////****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine05").ToString());
-
-                ////****** "v2rayN下载网址：https://github.com/2dust/v2rayN/releases" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine06").ToString());
-
-                ////****** "Qv2ray：https://github.com/Qv2ray/Qv2ray/releases" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine07").ToString());
-
-                ////****** "v2rayNG(Android)下载网址：https://github.com/2dust/v2rayNG/releases" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine08").ToString());
-
-                ////****** "v2rayNG(Android)在Google Play下载网址：https://play.google.com/store/apps/details?id=com.v2ray.ang" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine09").ToString());
-
-                ////****** "Shadowrocket(ios)下载,需要使用国外区的AppleID。请自行谷歌方法。" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine10").ToString());
-
-                //sw.WriteLine("-----------------------------------------");
-                //sw.WriteLine("url.txt");
-
-                ////****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine11").ToString());
-
-                ////写入通用配置参数--
-                //TxtWriteGeneralParameters(sw);
+            //TextBoxURL.Text = TextBoxURLTrojanTcp;
+            using (StreamWriter sw = new StreamWriter($"{configSavePath}\\url.txt"))
+            {
+                sw.WriteLine(TextBoxURLTrojanTcp);
 
             }
+            //ImageShareQRcode.Source = CreateQRCode(TextBoxURLTrojanTcp, $"{configSavePath}\\QR.bmp");
+            ImageShareQRcodeTrojanTcp = CreateQRCode(TextBoxURLTrojanTcp, $"{configSavePath}\\QR.bmp");
+            //ImageShareQRcode.Source = ImageShareQRcodeTrojanTcp;
+            //移动官方程序配置文件到相应目录
+            if (File.Exists($"v2ray_config\\{plainSavePath}\\config.json"))
+            {
+                File.Move($"v2ray_config\\{plainSavePath}\\config.json", $"{configSavePath}\\config.json");
+                Directory.Delete($"v2ray_config\\{plainSavePath}");
+            }
+
+            using (StreamWriter sw = new StreamWriter($"{configSavePath}\\readme.txt"))
+            {
+                //ReadmeTxtWriteGenerate(sw);
+                sw.WriteLine("config.json");
+                //****** "此文件为v2ray官方程序所使用的客户端配置文件，配置为全局模式，socks5地址：127.0.0.1:1080，http代理地址：127.0.0.1:1081" ******
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine01").ToString());
+
+                //****** "v2ray官方网站：https://www.v2ray.com/" ******
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine02").ToString());
+
+                //****** "v2ray官方程序下载地址：https://github.com/v2ray/v2ray-core/releases" ******
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine03").ToString());
+
+                //****** "下载相应版本，Windows选择v2ray-windows-64.zip或者v2ray-windows-32.zip，解压后提取v2ctl.exe和v2ray.exe。与config.json放在同一目录，运行v2ray.exe即可。" ******
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine04").ToString());
+
+                sw.WriteLine("-----------------------------------------");
+                sw.WriteLine("QR.bmp");
+
+                //****** "此文件为v2rayN(windows)、Qv2ray(windows)、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine05").ToString());
+
+                //****** "v2rayN下载网址：https://github.com/2dust/v2rayN/releases" ******
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine06").ToString());
+
+                //****** "Qv2ray下载网址：https://github.com/Qv2ray/Qv2ray/releases" ******
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine07").ToString());
+
+                //****** "v2rayNG(Android)下载网址：https://github.com/2dust/v2rayNG/releases" ******
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine08").ToString());
+
+                //****** "v2rayNG(Android)在Google Play下载网址：https://play.google.com/store/apps/details?id=com.v2ray.ang" ******
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine09").ToString());
+
+                //****** "Shadowrocket(ios)下载,需要使用国外区的AppleID。请自行谷歌方法。" ******
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine10").ToString());
+
+                sw.WriteLine("-----------------------------------------");
+                sw.WriteLine("url.txt");
+
+                //****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" ******
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine11").ToString());
+
+                sw.WriteLine("-----------------------------------------\n");
+
+                string strApplicat = "";
+                string strParam = "";
+                int strLenth = 20;
+                //****** "服务器通用连接配置参数:" ******
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine12").ToString());
+                sw.WriteLine("");
+
+                strApplicat = "TextBlockServerAddress";
+                strParam = TextBoxHostAddress.Text;
+                sw.WriteLine(AlignmentStrFunc(Application.Current.FindResource($"{strApplicat}").ToString(), strLenth) + strParam);
+
+                strApplicat = "TextBlockServerPort";
+                strParam = TextBoxPort.Text;
+                sw.WriteLine(AlignmentStrFunc(Application.Current.FindResource($"{strApplicat}").ToString(), strLenth) + strParam);
+
+                strApplicat = "TextBlockUserUUID";
+                strParam = TextBoxUUID.Text;
+                sw.WriteLine(AlignmentStrFunc(Application.Current.FindResource($"{strApplicat}").ToString(), strLenth) + strParam);
+
+            }
+
         }
 
         //写入VMESS的readme.txt文件
@@ -3154,8 +3243,6 @@ namespace ProxySU
             //return strTemp + spaceString;
             return spaceString + strTemp;
         }
-
-    
 
       
     }
