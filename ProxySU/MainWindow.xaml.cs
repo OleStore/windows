@@ -1355,13 +1355,13 @@ namespace ProxySU
             //currentShellCommandResult = MainWindowsShowCmd(client, sshShellCommand);
 
             //备份原来的文件
-            //functionResult = FileCheckExists(client, @"/usr/local/etc/v2ray/config.json");
-            //if (functionResult == true)
-            //{
+            functionResult = FileCheckExists(client, @"/usr/local/etc/v2ray/config.json");
+            if (functionResult == true)
+            {
 
             sshShellCommand = @"mv /usr/local/etc/v2ray/config.json /usr/local/etc/v2ray/config.json.1";
             currentShellCommandResult = MainWindowsShowCmd(client, sshShellCommand);
-            //}
+            }
             //读取配置文件各个模块
             string logConfigJson = $"{pwdir}" + @"TemplateConfg\v2ray\server\00_log\00_log.json";
             string apiConfigJson = $"{pwdir}" + @"TemplateConfg\v2ray\server\01_api\01_api.json";
@@ -1959,29 +1959,29 @@ namespace ProxySU
                 {
                     //复合方案所需要的配置文件
                     //VLESS over TCP with XTLS模式
-                    string outboundsConfigJsons = $"{pwdir}" + @"TemplateConfg\v2ray\client\06_outbounds\vless_tcp_xtls_client_config.json";
-                    using (StreamReader readerJson = File.OpenText(outboundsConfigJsons))
-                    {
-                        JObject jObjectJson = (JObject)JToken.ReadFrom(new JsonTextReader(readerJson));
+                    //string outboundsConfigJsons = $"{pwdir}" + @"TemplateConfg\v2ray\client\06_outbounds\vless_tcp_xtls_client_config.json";
+                    //using (StreamReader readerJson = File.OpenText(outboundsConfigJsons))
+                    //{
+                    //    JObject jObjectJson = (JObject)JToken.ReadFrom(new JsonTextReader(readerJson));
 
-                        //设置客户端的地址/端口/id
-                        jObjectJson["outbounds"][0]["settings"]["vnext"][0]["address"] = ReceiveConfigurationParameters[4];
-                        jObjectJson["outbounds"][0]["settings"]["vnext"][0]["port"] = int.Parse(ReceiveConfigurationParameters[1]);
-                        jObjectJson["outbounds"][0]["settings"]["vnext"][0]["users"][0]["id"] = ReceiveConfigurationParameters[2];
+                    //    //设置客户端的地址/端口/id
+                    //    jObjectJson["outbounds"][0]["settings"]["vnext"][0]["address"] = ReceiveConfigurationParameters[4];
+                    //    jObjectJson["outbounds"][0]["settings"]["vnext"][0]["port"] = int.Parse(ReceiveConfigurationParameters[1]);
+                    //    jObjectJson["outbounds"][0]["settings"]["vnext"][0]["users"][0]["id"] = ReceiveConfigurationParameters[2];
 
-                        clientJson["outbounds"] = jObjectJson["outbounds"];
-                        if (!Directory.Exists(@"v2ray_config\vless_tcp_xtls_client_config"))//如果不存在就创建file文件夹　　             　　              
-                        {
-                            Directory.CreateDirectory(@"v2ray_config\vless_tcp_xtls_client_config");//创建该文件夹　　   
-                        }
-                        using (StreamWriter sw = new StreamWriter(@"v2ray_config\vless_tcp_xtls_client_config\config.json"))
-                        {
-                            sw.Write(clientJson.ToString());
-                        }
-                    }
+                    //    clientJson["outbounds"] = jObjectJson["outbounds"];
+                    //    if (!Directory.Exists(@"v2ray_config\vless_tcp_xtls_client_config"))//如果不存在就创建file文件夹　　             　　              
+                    //    {
+                    //        Directory.CreateDirectory(@"v2ray_config\vless_tcp_xtls_client_config");//创建该文件夹　　   
+                    //    }
+                    //    using (StreamWriter sw = new StreamWriter(@"v2ray_config\vless_tcp_xtls_client_config\config.json"))
+                    //    {
+                    //        sw.Write(clientJson.ToString());
+                    //    }
+                    //}
 
                     //VLESS over TCP with TLS模式
-                    outboundsConfigJsons = $"{pwdir}" + @"TemplateConfg\v2ray\client\06_outbounds\vless_tcp_tls_caddy_cilent_config.json";
+                    string outboundsConfigJsons = $"{pwdir}" + @"TemplateConfg\v2ray\client\06_outbounds\vless_tcp_tls_caddy_cilent_config.json";
                     using (StreamReader readerJson = File.OpenText(outboundsConfigJsons))
                     {
                         JObject jObjectJson = (JObject)JToken.ReadFrom(new JsonTextReader(readerJson));
@@ -2919,13 +2919,13 @@ namespace ProxySU
             //currentShellCommandResult = MainWindowsShowCmd(client, sshShellCommand);
 
             //备份原来的文件
-            //functionResult = FileCheckExists(client, @"/usr/local/etc/xray/config.json");
-            //if (functionResult == true)
-            //{
+            functionResult = FileCheckExists(client, @"/usr/local/etc/xray/config.json");
+            if (functionResult == true)
+            {
 
             sshShellCommand = @"mv /usr/local/etc/xray/config.json /usr/local/etc/xray/config.json.1";
             currentShellCommandResult = MainWindowsShowCmd(client, sshShellCommand);
-            //}
+            }
             //读取配置文件各个模块
             string logConfigJson = $"{pwdir}" + @"TemplateConfg\xray\server\00_log\00_log.json";
             string apiConfigJson = $"{pwdir}" + @"TemplateConfg\xray\server\01_api\01_api.json";
@@ -3159,7 +3159,7 @@ namespace ProxySU
                         || String.Equals(ReceiveConfigurationParameters[0], "tcpTLSselfSigned") == true
                         || String.Equals(ReceiveConfigurationParameters[0], "http2selfSigned") == true)
                     {
-                        string selfSignedCa = client.RunCommand("/usr/local/bin/v2ctl cert --ca").Result;
+                        string selfSignedCa = client.RunCommand("/usr/local/bin/xray tls cert --ca").Result;
                         JObject selfSignedCaJObject = JObject.Parse(selfSignedCa);
                         jObjectJson["inbounds"][0]["streamSettings"]["tlsSettings"]["certificates"][0] = selfSignedCaJObject;
                     }
@@ -8051,6 +8051,82 @@ namespace ProxySU
                     }
                     #endregion
 
+                    #region 卸载Xay
+
+                    //******"检测系统是否已经安装Xray......"******03
+                    SetUpProgressBarProcessing(66);
+                    currentStatus = Application.Current.FindResource("DisplayInstallInfo_TestExistSoft").ToString() + "Xray......";
+                    MainWindowsShowInfo(currentStatus);
+
+                    //sshShellCommand = @"find / -name v2ray";
+                    //currentShellCommandResult = MainWindowsShowCmd(client, sshShellCommand);
+                    functionResult = FileCheckExists(client, @"/usr/local/bin/xray");
+                    if (functionResult == true)
+                    {
+                        //******"检测到已安装V2Ray!开始卸载Xray......"******
+                        SetUpProgressBarProcessing(68);
+                        currentStatus = Application.Current.FindResource("DisplayInstallInfo_DiscoverProxySoft").ToString()
+                            + "Xray!"
+                            + Application.Current.FindResource("DisplayInstallInfo_StartRemoveProxy").ToString()
+                            + "Xray......";
+                        MainWindowsShowInfo(currentStatus);
+
+                        sshShellCommand = @"systemctl stop xray";
+                        currentShellCommandResult = MainWindowsShowCmd(client, sshShellCommand);
+
+                        saveShellScriptFileName = GenerateRandomScriptFileName(GenerateRandomStr(10));
+
+                        sshShellCommand = $"curl -o {saveShellScriptFileName} https://raw.githubusercontent.com/XTLS/Xray-install/main/install-release.sh";
+                        currentShellCommandResult = MainWindowsShowCmd(client, sshShellCommand);
+
+                        functionResult = FileCheckExists(client, $"{saveShellScriptFileName}");
+                        if (functionResult == false)
+                        {
+                            //***文件下载失败！***
+                            currentStatus = Application.Current.FindResource("DisplayInstallInfo_DownloadScriptFailed").ToString();
+                            MainWindowsShowInfo(currentStatus);
+                            return;
+                        }
+
+                        sshShellCommand = $"bash {saveShellScriptFileName} --remove";
+                        currentShellCommandResult = MainWindowsShowCmd(client, sshShellCommand);
+
+                        sshShellCommand = @"systemctl disable xray";
+                        currentShellCommandResult = MainWindowsShowCmd(client, sshShellCommand);
+
+                        sshShellCommand = @"rm -rf /usr/local/etc/xray /var/log/xray";
+                        currentShellCommandResult = MainWindowsShowCmd(client, sshShellCommand);
+
+                        sshShellCommand = $"rm -f {saveShellScriptFileName}";
+                        currentShellCommandResult = MainWindowsShowCmd(client, sshShellCommand);
+
+                        functionResult = FileCheckExists(client, @"/usr/local/bin/xray");
+                        if (functionResult == true)
+                        //if (currentShellCommandResult.Contains("/usr/local/bin/v2ray") == true)
+                        {
+                            //******"V2Ray卸载失败！请向开发者问询！"******
+                            currentStatus = "Xray" + Application.Current.FindResource("DisplayInstallInfo_RemoveProxySoftFailed").ToString();
+                            MainWindowsShowInfo(currentStatus);
+                        }
+                        else
+                        {
+                            //******"V2Ray卸载成功！"******
+                            SetUpProgressBarProcessing(70);
+                            currentStatus = "Xray" + Application.Current.FindResource("DisplayInstallInfo_RemoveProxySoftSuccess").ToString();
+                            MainWindowsShowInfo(currentStatus);
+                        }
+
+                    }
+                    else
+                    {
+                        //******"检测结果：未安装Xray！"******04
+                        SetUpProgressBarProcessing(70);
+                        currentStatus = Application.Current.FindResource("DisplayInstallInfo_NoInstalledSoft").ToString() + "Xray!";
+                        MainWindowsShowInfo(currentStatus);
+                    }
+
+                    #endregion
+
                     //如果是纯ipv6主机，则需要删除前面设置的Nat64网关
                     if (onlyIpv6 == true)
                     {
@@ -10000,7 +10076,7 @@ namespace ProxySU
 
        
         //上传服务配置 47--50
-
+        private bool GenerateServerConfigurations(SshClient client) { return true; }
 
         //acme.sh安装与申请证书 51--57
         //functionResult = AcmeShInstall(client);
@@ -10055,12 +10131,12 @@ namespace ProxySU
 
             if (onlyIpv6 == true)
             {
-                sshShellCommand = $"/root/.acme.sh/acme.sh --force --issue  --standalone  -d {ReceiveConfigurationParameters[4]} --listen-v6";
+                sshShellCommand = $"/root/.acme.sh/acme.sh --force --debug --issue  --standalone  -d {ReceiveConfigurationParameters[4]} --listen-v6";
                 currentShellCommandResult = MainWindowsShowCmd(client, sshShellCommand);
             }
             else
             {
-                sshShellCommand = $"/root/.acme.sh/acme.sh --force --issue  --standalone  -d {ReceiveConfigurationParameters[4]}";
+                sshShellCommand = $"/root/.acme.sh/acme.sh --force --debug --issue  --standalone  -d {ReceiveConfigurationParameters[4]}";
                 currentShellCommandResult = MainWindowsShowCmd(client, sshShellCommand);
             }
 

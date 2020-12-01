@@ -1,10 +1,10 @@
 
 # ProxySU
-V2ray, Trojan, NaiveProxy, Trojan-Go, ShadowsocksR(SSR),Shadowsocks-libev and Plugins,MTProto+TLS,BBR install tools for windows。  
-V2ray，Trojan，NaiveProxy, Trojan-Go, ShadowsocksR(SSR),Shadowsocks-libev及相关插件,MTProto+TLS 一键安装工具。支持纯ipv6主机一键安装代理。  
+V2ray, Xray,Trojan, NaiveProxy, Trojan-Go, ShadowsocksR(SSR),Shadowsocks-libev and Plugins,MTProto+TLS,BBR install tools for windows。  
+V2ray，Xray,Trojan，NaiveProxy, Trojan-Go, ShadowsocksR(SSR),Shadowsocks-libev及相关插件,MTProto+TLS 一键安装工具。支持纯ipv6主机一键安装代理。  
 BBR一键开启（仅支持CentOS8/Debian9/10/Ubuntu18.04及以上）,支持语言:English、简体中文、正体（繁体）中文。
 
-编译环境Visual Studio 2017  使用WPF界面。可一键安装V2ray、Trojan、NaiveProxy，Trojan-Go,ShadowsocksR(SSR),Shadowsocks-libev and Plugins、MTProto+TLS 后续还会再添加其他。  
+编译环境Visual Studio 2017  使用WPF界面。可一键安装V2ray、Xray,Trojan、NaiveProxy，Trojan-Go,ShadowsocksR(SSR),Shadowsocks-libev and Plugins、MTProto+TLS 后续还会再添加其他。  
 
 
 
@@ -13,9 +13,29 @@ BBR一键开启（仅支持CentOS8/Debian9/10/Ubuntu18.04及以上）,支持语�
 #### 再次声明：  
 ##### ProxySU本着技术中立的原则，没有任何立场，也不持任何见解，更不涉及任何政治因素。ProxySU仅仅主张人的知情权，这是一项天赋人权，也是各国宪法所保障的最基本人权。知情权包含对同一事物正负两方面评价的知情，至于相信哪个，由人自己选择。正如李文亮医生临终所言：一个正常的社会是不应该只有一种声音的。如果真的存在对某一事物只有一种声音的评价，无论其评价是正面还是负面，都是要慎重对待，并需要重新审视的。  
 
+##### Xray可一键安装的模式有： 
+当前Xray是V2Ray的超集，未来Xray会有不同的发展方向。  
+* VLESS+TCP+XTLS+Web (最新黑科技)  
+* Vless+tcp+TLS+Web (新热门协议)  
+* VLESS+WebSocket+TLS+Web  
+* VLESS+http2+TLS+Web  
+* VLESS+mKCP
+* tcp 
+* tcp+http伪装  
+* tcp+TLS 
+* tcp+TLS （自签证书）
+* WebSocket
+* WebSocket+TLS 
+* WebSocket+TLS+Web 
+* WebSocket+TLS（自签证书） 
+* http2  
+* http2+TLS+Web
+* http2（自签证书）  
+* mKCP及各种伪装 
+* QUIC及各种伪装。  
+
 ##### V2ray可一键安装的模式有： 
 
-* VLESS+TCP+XTLS+Web (最新黑科技)
 * Vless+tcp+TLS+Web (新热门协议)  
 * VLESS+WebSocket+TLS+Web  
 * VLESS+http2+TLS+Web  
@@ -82,6 +102,7 @@ ProxySU的安装流程，是假设在全新系统下，没有装过以上代理�
 ProxySU将安装代理软件的最新版本，为了最好的兼容，请确保客户端也是当前最新版本。  
 
 在实际使用中，发现Centos7,debian8,ubunutu16.04等版本，安装出错的机率很大，不建议使用以上版本。低于以上版本的，无法使用ProxySU.  
+
 Nat类型的vps主机，因为无法独占80，443端口，使用tls模式的代理，可能不能申请证书，安装会失败。  
 
 ProxySU在开发过程中，一般都是在vultr的vps中测试，测试系统版本为：Debian 10。由于同一个版本的Linux系统，不同的VPS商,云服务商也不完全相同。实在没有精力去逐一测试。如果安装失败，可以先尝试以下方法解决：  
@@ -121,7 +142,11 @@ Let's Encrypt证书申请频率的限制
 (网友分享)  
 
 #### 伪装网站使用说明  
-伪装网站是网上已经现存的任何网站，没有敏感信息的，没有被墙的国外网站都行，不需要自已搭建。只填域名，不要带 http 或 /。  
+伪装网站是网上已经现存的任何网站，没有敏感信息的，没有被墙的国外网站都行，不需要自已搭建。只填域名，不要带 http 或 /，也不要与当前使用的域名相同。  
+
+###### Xray模式目前已支持生成用于
+
+* 使用与V2Ray相兼容的客户端  
 
 ###### V2ray模式目前已支持生成用于
 
@@ -171,6 +196,7 @@ Let's Encrypt证书申请频率的限制
 ## 程序工作流程：  
 1. 使用[SSH.NET](https://github.com/sshnet/SSH.NET)登录远程主机  
 2. 根据选择的代理来调用相应的脚本：  
+  * 选择Xray，则调用Xray官方安装脚本 `curl -o /tmp/go.sh https://raw.githubusercontent.com/XTLS/Xray-install/main/install-release.sh` `yes | bash /tmp/go.sh -f` ，安装Xray。
   * 选择V2ray，则调用V2ray官方安装脚本 `curl -o /tmp/go.sh https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh` `yes | bash /tmp/go.sh -f` ，安装V2ray。  
   * 选择Trojan，则调用Trojan官方安装脚本 `curl -o /tmp/trojan-quickstart.sh https://raw.githubusercontent.com/trojan-gfw/trojan-quickstart/master/trojan-quickstart.sh` `yes | bash /tmp/trojan-quickstart.sh` 安装Trojan。  
   * 选择Trojan-Go，则调用本项目内的trojan-go.sh安装， `curl -o /tmp/trojan-go.sh https://raw.githubusercontent.com/proxysu/shellscript/master/trojan-go.sh` `yes | bash /tmp/trojan-go.sh -f` 安装Trojan-GO。  

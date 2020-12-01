@@ -61,6 +61,7 @@ namespace ProxySU
                 GroupBoxClientQRandURL.Visibility = Visibility.Visible;
                 GroupBoxClientSSpc.Visibility = Visibility.Collapsed;
                 GroupBoxV2rayClient.Visibility = Visibility.Visible;
+                GroupBoxXrayClient.Visibility = Visibility.Collapsed;
                 GroupBoxTrojanGoClient.Visibility = Visibility.Collapsed;
                 GroupBoxTrojanClient.Visibility = Visibility.Collapsed;
                 GroupBoxNaiveProxyClient.Visibility = Visibility.Collapsed;
@@ -382,7 +383,7 @@ namespace ProxySU
                     GenerateV2rayVmessWsTlsShareQRcodeAndBase64Url();
 
                     GenerateV2rayTrojanShareQRcodeAndBase64Url();
-                    RadioButtonVlessTcpXtls.IsChecked = true;
+                    RadioButtonVlessTcpTls.IsChecked = true;
                 }
 
             }
@@ -697,7 +698,7 @@ namespace ProxySU
                     GroupBoxSelectVlessVmessXtlsTcpWsXray.Visibility = Visibility.Visible;
 
                     string proxyfolder = CheckDir("xray_config");
-                    configDomainSavePath = CreateConfigSaveDir(proxyfolder, TextBoxHostAddress.Text);
+                    configDomainSavePath = CreateConfigSaveDir(proxyfolder, TextBoxHostAddressXray.Text);
 
                     XraySetVlessTcpXtls();
                     GenerateXrayVlessTcpXtlsShareQRcodeAndBase64Url();
@@ -711,7 +712,7 @@ namespace ProxySU
                     XraySetVmessTcpTls();
                     GenerateXrayVmessTcpTlsShareQRcodeAndBase64Url();
 
-                    V2raySetVmessWsTls();
+                    XraySetVmessWsTls();
                     GenerateXrayVmessWsTlsShareQRcodeAndBase64Url();
 
                     GenerateXrayTrojanShareQRcodeAndBase64Url();
@@ -726,6 +727,7 @@ namespace ProxySU
                 GroupBoxClientQRandURL.Visibility = Visibility.Visible;
                 GroupBoxClientSSpc.Visibility = Visibility.Collapsed;
                 GroupBoxV2rayClient.Visibility = Visibility.Collapsed;
+                GroupBoxXrayClient.Visibility = Visibility.Collapsed;
                 GroupBoxTrojanGoClient.Visibility = Visibility.Visible;
                 GroupBoxTrojanClient.Visibility = Visibility.Collapsed;
                 GroupBoxNaiveProxyClient.Visibility = Visibility.Collapsed;
@@ -788,6 +790,7 @@ namespace ProxySU
                 GroupBoxClientQRandURL.Visibility = Visibility.Visible;
                 GroupBoxClientSSpc.Visibility = Visibility.Collapsed;
                 GroupBoxV2rayClient.Visibility = Visibility.Collapsed;
+                GroupBoxXrayClient.Visibility = Visibility.Collapsed;
                 GroupBoxTrojanGoClient.Visibility = Visibility.Collapsed;
                 GroupBoxTrojanClient.Visibility = Visibility.Visible;
                 GroupBoxNaiveProxyClient.Visibility = Visibility.Collapsed;
@@ -812,6 +815,7 @@ namespace ProxySU
                 GroupBoxClientQRandURL.Visibility = Visibility.Visible;
                 GroupBoxClientSSpc.Visibility = Visibility.Collapsed;
                 GroupBoxV2rayClient.Visibility = Visibility.Collapsed;
+                GroupBoxXrayClient.Visibility = Visibility.Collapsed;
                 GroupBoxTrojanGoClient.Visibility = Visibility.Collapsed;
                 GroupBoxTrojanClient.Visibility = Visibility.Collapsed;
                 GroupBoxNaiveProxyClient.Visibility = Visibility.Visible;
@@ -831,6 +835,7 @@ namespace ProxySU
                 GroupBoxClientQRandURL.Visibility = Visibility.Visible;
                 GroupBoxClientSSpc.Visibility = Visibility.Collapsed;
                 GroupBoxV2rayClient.Visibility = Visibility.Collapsed;
+                GroupBoxXrayClient.Visibility = Visibility.Collapsed;
                 GroupBoxTrojanGoClient.Visibility = Visibility.Collapsed;
                 GroupBoxTrojanClient.Visibility = Visibility.Collapsed;
                 GroupBoxNaiveProxyClient.Visibility = Visibility.Collapsed;
@@ -861,6 +866,7 @@ namespace ProxySU
                 GroupBoxClientQRandURL.Visibility = Visibility.Visible;
                 GroupBoxClientSSpc.Visibility = Visibility.Collapsed;
                 GroupBoxV2rayClient.Visibility = Visibility.Collapsed;
+                GroupBoxXrayClient.Visibility = Visibility.Collapsed;
                 GroupBoxTrojanGoClient.Visibility = Visibility.Collapsed;
                 GroupBoxTrojanClient.Visibility = Visibility.Collapsed;
                 GroupBoxNaiveProxyClient.Visibility = Visibility.Collapsed;
@@ -967,6 +973,7 @@ namespace ProxySU
                 GroupBoxClientQRandURL.Visibility = Visibility.Collapsed;
                 GroupBoxClientSSpc.Visibility = Visibility.Collapsed;
                 GroupBoxV2rayClient.Visibility = Visibility.Collapsed;
+                GroupBoxXrayClient.Visibility = Visibility.Collapsed;
                 GroupBoxTrojanGoClient.Visibility = Visibility.Collapsed;
                 GroupBoxTrojanClient.Visibility = Visibility.Collapsed;
                 GroupBoxNaiveProxyClient.Visibility = Visibility.Collapsed;
@@ -1736,7 +1743,7 @@ namespace ProxySU
 
             //}
 
-            //   ImageShareQRcodeDefault = CreateQRCode(TextBoxURLDefault, $"v2ray_config\\{saveFileFolder}\\QR.bmp");
+            // ImageShareQRcodeDefault = CreateQRCode(TextBoxURLDefault, $"v2ray_config\\{saveFileFolder}\\QR.bmp");
             // ImageShareQRcode.Source = ImageShareQRcodeDefault;
 
 
@@ -2462,7 +2469,7 @@ namespace ProxySU
         private void XraySetVlessTcpXtls()
         {
             GridNotTrojanParametersXray.Visibility = Visibility.Visible;
-            TextBlockVmessOrVlessXray.Text = Application.Current.FindResource("TabItemHeaderXrayVlessProtocol").ToString();
+            TextBlockVmessOrVlessXray.Text = Application.Current.FindResource("TabItemHeaderV2RayVlessProtocol").ToString();
             TextBlockVmessOrVlessXray.Visibility = Visibility.Visible;
             //隐藏下面的二维码显示
             HideGroupBoxClientQRandURL();
@@ -2485,7 +2492,7 @@ namespace ProxySU
         private void XraySetVlessTcpTls()
         {
             GridNotTrojanParametersXray.Visibility = Visibility.Visible;
-            TextBlockVmessOrVlessXray.Text = Application.Current.FindResource("TabItemHeaderXrayVlessProtocol").ToString();
+            TextBlockVmessOrVlessXray.Text = Application.Current.FindResource("TabItemHeaderV2RayVlessProtocol").ToString();
             TextBlockVmessOrVlessXray.Visibility = Visibility.Visible;
             //隐藏下面的二维码显示
             HideGroupBoxClientQRandURL();
@@ -2506,7 +2513,7 @@ namespace ProxySU
         private void XraySetVlessWsTls()
         {
             GridNotTrojanParametersXray.Visibility = Visibility.Visible;
-            TextBlockVmessOrVlessXray.Text = Application.Current.FindResource("TabItemHeaderXrayVlessProtocol").ToString();
+            TextBlockVmessOrVlessXray.Text = Application.Current.FindResource("TabItemHeaderV2RayVlessProtocol").ToString();
             TextBlockVmessOrVlessXray.Visibility = Visibility.Visible;
             //隐藏下面的二维码显示
             HideGroupBoxClientQRandURL();
@@ -2675,16 +2682,6 @@ namespace ProxySU
             TextBoxCamouflageTypeXray.Visibility = Visibility.Collapsed;
         }
 
-        /*    //显示二维码与链接分享
-           private void ShowGroupBoxClientQRandURL()
-           {
-               GroupBoxClientQRandURL.Visibility = Visibility.Visible;
-           }
-           //隐藏二维码与链接分享
-           private void HideGroupBoxClientQRandURL()
-           {
-               GroupBoxClientQRandURL.Visibility = Visibility.Hidden;
-           } */
 
         //以下几个为对RadioButton按钮的选中后，界面变化与参数显示
         private void RadioButtonVlessTcpXtlsXray_Checked(object sender, RoutedEventArgs e)
@@ -2720,23 +2717,7 @@ namespace ProxySU
 
         #region 复制参数到剪贴板中
 
-        /*         //复制内容到剪贴板函数
-                private void CopyToClipboard(string content)
-                {
-                    if (content != "")
-                    {
-                        Clipboard.SetDataObject(content);
-                        //MessageBox.Show(Application.Current.FindResource("MessageBoxShow_XrayUUIDcopyedToClip").ToString());
-                        string message = Application.Current.FindResource("MessageBoxShow_XrayUUIDcopyedToClip").ToString();
-                        MessageBoxTimeoutA((IntPtr)0, message, "", 0, 0, 600);    // 直接调用  0.6秒后自动关闭 
-                    }
-                    else
-                    {
-                        //MessageBox.Show(Application.Current.FindResource("MessageBoxShow_XrayEmptyToClip").ToString());
-                        string message = Application.Current.FindResource("MessageBoxShow_XrayEmptyToClip").ToString();
-                        MessageBoxTimeoutA((IntPtr)0, message, "", 0, 0, 600);    // 直接调用  0.6秒后自动关闭 
-                    }
-                } */
+
 
         //复制服务器地址到剪贴板
         private void TextBoxHostAddressXray_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -2996,28 +2977,28 @@ namespace ProxySU
                 //sw.WriteLine("QR.bmp");
 
                 //****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine05").ToString());
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine05").ToString());
 
                 //****** "v2rayN下载网址：https://github.com/2dust/v2rayN/releases" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine06").ToString());
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine06").ToString());
 
                 //****** "Qv2ray：https://github.com/Qv2ray/Qv2ray/releases" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine07").ToString());
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine07").ToString());
 
                 //****** "v2rayNG(Android)下载网址：https://github.com/2dust/v2rayNG/releases" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine08").ToString());
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine08").ToString());
 
                 //****** "v2rayNG(Android)在Google Play下载网址：https://play.google.com/store/apps/details?id=com.v2ray.ang" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine09").ToString());
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine09").ToString());
 
                 //****** "Shadowrocket(ios)下载,需要使用国外区的AppleID。请自行谷歌方法。" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine10").ToString());
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine10").ToString());
 
                 //sw.WriteLine("-----------------------------------------");
                 //sw.WriteLine("url.txt");
 
                 //****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine11").ToString());
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine11").ToString());
 
                 //写入通用配置参数
                 TxtWriteGeneralParametersXray(sw);
@@ -3116,44 +3097,44 @@ namespace ProxySU
             using (StreamWriter sw = new StreamWriter($"{configSavePath}\\readme.txt"))
             {
                 sw.WriteLine("config.json");
-                //****** "此文件为v2ray官方程序所使用的客户端配置文件，配置为全局模式，socks5地址：127.0.0.1:1080，http代理地址：127.0.0.1:1081" ******
+                //****** "此文件为Xray官方程序所使用的客户端配置文件，配置为全局模式，socks5地址：127.0.0.1:1080，http代理地址：127.0.0.1:1081" ******
                 sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine01").ToString());
 
-                //****** "v2ray官方网站：https://www.v2ray.com/" ******
+                //****** "Xray官方网站：https://github.com/XTLS/Xray-core" ******
                 sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine02").ToString());
 
-                //****** "v2ray官方程序下载地址：https://github.com/v2ray/v2ray-core/releases" ******
+                //****** "Xray官方程序下载地址：https://github.com/XTLS/Xray-core/releases" ******
                 sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine03").ToString());
 
-                //****** "下载相应版本，Windows选择v2ray-windows-64.zip或者v2ray-windows-32.zip，解压后提取v2ctl.exe和v2ray.exe。与config.json放在同一目录，运行v2ray.exe即可。" ******
+                //****** "下载相应版本，Windows选择xray-windows-64.zip或者xray-windows-32.zip，解压后提取xray.exe。与config.json放在同一目录，运行xray.exe即可。" ******
                 sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine04").ToString());
 
                 //sw.WriteLine("-----------------------------------------");
                 //sw.WriteLine("QR.bmp");
 
-                //****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine05").ToString());
+                //****** "此文件为v2rayN(windows)、Qv2ray(windows)、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine05").ToString());
 
                 //****** "v2rayN下载网址：https://github.com/2dust/v2rayN/releases" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine06").ToString());
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine06").ToString());
 
-                //****** "Qv2ray：https://github.com/Qv2ray/Qv2ray/releases" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine07").ToString());
+                //****** "Qv2ray下载网址：https://github.com/Qv2ray/Qv2ray/releases" ******
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine07").ToString());
 
                 //****** "v2rayNG(Android)下载网址：https://github.com/2dust/v2rayNG/releases" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine08").ToString());
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine08").ToString());
 
                 //****** "v2rayNG(Android)在Google Play下载网址：https://play.google.com/store/apps/details?id=com.v2ray.ang" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine09").ToString());
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine09").ToString());
 
                 //****** "Shadowrocket(ios)下载,需要使用国外区的AppleID。请自行谷歌方法。" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine10").ToString());
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine10").ToString());
 
                 //sw.WriteLine("-----------------------------------------");
                 //sw.WriteLine("url.txt");
 
                 //****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine11").ToString());
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine11").ToString());
 
                 //写入通用配置参数--
                 TxtWriteGeneralParametersXray(sw, false);
@@ -3253,44 +3234,44 @@ namespace ProxySU
             using (StreamWriter sw = new StreamWriter($"{configSavePath}\\readme.txt"))
             {
                 sw.WriteLine("config.json");
-                //****** "此文件为v2ray官方程序所使用的客户端配置文件，配置为全局模式，socks5地址：127.0.0.1:1080，http代理地址：127.0.0.1:1081" ******
+                //****** "此文件为Xray官方程序所使用的客户端配置文件，配置为全局模式，socks5地址：127.0.0.1:1080，http代理地址：127.0.0.1:1081" ******
                 sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine01").ToString());
 
-                //****** "v2ray官方网站：https://www.v2ray.com/" ******
+                //****** "Xray官方网站：https://github.com/XTLS/Xray-core" ******
                 sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine02").ToString());
 
-                //****** "v2ray官方程序下载地址：https://github.com/v2ray/v2ray-core/releases" ******
+                //****** "Xray官方程序下载地址：https://github.com/XTLS/Xray-core/releases" ******
                 sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine03").ToString());
 
-                //****** "下载相应版本，Windows选择v2ray-windows-64.zip或者v2ray-windows-32.zip，解压后提取v2ctl.exe和v2ray.exe。与config.json放在同一目录，运行v2ray.exe即可。" ******
+                //****** "下载相应版本，Windows选择xray-windows-64.zip或者xray-windows-32.zip，解压后提取v2ray.exe。与config.json放在同一目录，运行xray.exe即可。" ******
                 sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine04").ToString());
 
                 //sw.WriteLine("-----------------------------------------");
                 //sw.WriteLine("QR.bmp");
 
-                //****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine05").ToString());
+                //****** "此文件为v2rayN(windows)、Qv2ray(windows)、v2rayNG(Android)、Shadowrocket(ios)扫码导入节点" ******
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine05").ToString());
 
                 //****** "v2rayN下载网址：https://github.com/2dust/v2rayN/releases" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine06").ToString());
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine06").ToString());
 
-                //****** "Qv2ray：https://github.com/Qv2ray/Qv2ray/releases" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine07").ToString());
+                //****** "Qv2ray下载网址：https://github.com/Qv2ray/Qv2ray/releases" ******
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine07").ToString());
 
                 //****** "v2rayNG(Android)下载网址：https://github.com/2dust/v2rayNG/releases" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine08").ToString());
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine08").ToString());
 
                 //****** "v2rayNG(Android)在Google Play下载网址：https://play.google.com/store/apps/details?id=com.v2ray.ang" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine09").ToString());
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine09").ToString());
 
                 //****** "Shadowrocket(ios)下载,需要使用国外区的AppleID。请自行谷歌方法。" ******
-                sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine10").ToString());
+                sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine10").ToString());
 
                 //sw.WriteLine("-----------------------------------------");
                 //sw.WriteLine("url.txt");
 
                 //****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine11").ToString());
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine11").ToString());
 
                 //写入通用配置参数--
                 TxtWriteGeneralParametersXray(sw, false);
@@ -3427,7 +3408,7 @@ namespace ProxySU
                 //sw.WriteLine("url.txt");
 
                 //****** "此文件为v2rayN、Qv2ray、v2rayNG(Android)、Shadowrocket(ios)复制粘贴导入节点的vmess网址" ******
-                //sw.WriteLine(Application.Current.FindResource("readmeTxtXrayExplainLine11").ToString());
+                //sw.WriteLine(Application.Current.FindResource("readmeTxtV2RayExplainLine11").ToString());
 
                 //写入通用配置参数--
                 TxtWriteGeneralParametersXray(sw, false);
@@ -3464,12 +3445,12 @@ namespace ProxySU
             v2rayNjsonObject["net"] = TextBoxTransmissionXray.Text; //设置传输模式
             v2rayNjsonObject["type"] = TextBoxCamouflageTypeXray.Text; //设置伪装类型
 
-            if (TextBoxTransmission.Text.Contains("kcp") == true)
+            if (TextBoxTransmissionXray.Text.Contains("kcp") == true)
             {
                 v2rayNjsonObject["path"] = TextBoxQuicKeyMkcpSeedPathXray.Text;//设置mKCP Seed
                 v2rayNjsonObject["host"] = "";//设置Host
             }
-            else if (TextBoxTransmission.Text.Contains("quic") == true)
+            else if (TextBoxTransmissionXray.Text.Contains("quic") == true)
             {
                 v2rayNjsonObject["path"] = TextBoxQuicKeyMkcpSeedPathXray.Text;//设置quic密钥
                 v2rayNjsonObject["host"] = TextBoxHostQuicEncryptionXray.Text;//Quic加密方式
@@ -3548,11 +3529,11 @@ namespace ProxySU
             v2rayNjsonObject["net"] = TextBoxTransmissionXray.Text; //设置传输模式
             v2rayNjsonObject["type"] = TextBoxCamouflageTypeXray.Text; //设置伪装类型
 
-            if (TextBoxTransmission.Text.Contains("kcp") == true)
+            if (TextBoxTransmissionXray.Text.Contains("kcp") == true)
             {
                 v2rayNjsonObject["path"] = TextBoxQuicKeyMkcpSeedPathXray.Text;//设置mKCP Seed
             }
-            else if (TextBoxTransmission.Text.Contains("quic") == true)
+            else if (TextBoxTransmissionXray.Text.Contains("quic") == true)
             {
                 v2rayNjsonObject["path"] = TextBoxQuicKeyMkcpSeedPathXray.Text;//设置quic密钥
                 v2rayNjsonObject["host"] = TextBoxHostQuicEncryptionXray.Text;//Quic加密方式
@@ -3576,14 +3557,12 @@ namespace ProxySU
             string configSavePath = CheckDir($"{configDomainSavePath}\\{plainSavePath}");
 
 
-            //生成二维码与URL，
+            //生成二维码与URL
             TextBoxURLVmessWs = "vmess://" + ToBase64Encode(v2rayNjsonObject.ToString());
             //TextBoxURL.Text = TextBoxURLVmessWs;
             using (StreamWriter sw = new StreamWriter($"{configSavePath}\\url.txt"))
             {
-
                 sw.WriteLine(TextBoxURLVmessWs);
-
             }
 
             ImageShareQRcodeVmessWs = CreateQRCode(TextBoxURLVmessWs, $"{configSavePath}\\QR.bmp");
@@ -3767,7 +3746,7 @@ namespace ProxySU
 
             if (alterId == true)
             {
-                strApplicat = "TextBlockXrayAlterId";
+                strApplicat = "TextBlockV2RayAlterId";
                 strParam = TextBoxUUIDextraXray.Text;
                 sw.WriteLine(AlignmentStrFunc(Application.Current.FindResource($"{strApplicat}").ToString(), strLenth) + strParam);
             }
@@ -4282,7 +4261,7 @@ namespace ProxySU
 
         #endregion
 
-        #region SSR相关
+        #region SSR 相关
         //生成SSR客户端资料
         private void GenerateSSRShareQRcodeAndBase64Url()
         {
@@ -4654,7 +4633,6 @@ namespace ProxySU
         #endregion
 
         #endregion
-
 
         #region MTProto 界面控制
         private void RadioButtonMtgIpv4_Checked(object sender, RoutedEventArgs e)
