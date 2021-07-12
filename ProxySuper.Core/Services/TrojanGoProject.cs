@@ -1,12 +1,8 @@
-﻿using ProxySuper.Core.Models;
-using ProxySuper.Core.Models.Projects;
+﻿using ProxySuper.Core.Models.Projects;
 using Renci.SshNet;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace ProxySuper.Core.Services
@@ -48,8 +44,10 @@ namespace ProxySuper.Core.Services
 
         public void Uninstall()
         {
+            EnsureRootAuth();
+            EnsureSystemEnv();
+
             RunCmd("systemctl stop trojan-go");
-            RunCmd("systemctl stop caddy");
             base.UninstallCaddy();
 
             RunCmd("rm -rf /usr/local/bin/trojan-go");
@@ -89,10 +87,6 @@ namespace ProxySuper.Core.Services
                 ConfigureSoftware();
                 WriteOutput("系统工具安装完成");
 
-                WriteOutput("检测IP6...");
-                ConfigureIPv6();
-                WriteOutput("检测IP6完成");
-
                 WriteOutput("配置防火墙...");
                 ConfigureFirewall();
                 WriteOutput("防火墙配置完成");
@@ -127,13 +121,12 @@ namespace ProxySuper.Core.Services
             {
                 var errorLog = "安装终止，" + ex.Message;
                 WriteOutput(errorLog);
-                MessageBox.Show(errorLog);
+                MessageBox.Show("安装失败，请联系开发者或上传日志文件(Logs文件夹下)到github提问。");
             }
         }
 
         private void InstallTrojanGo()
         {
-            WriteOutput("安装Trojan-Go");
             RunCmd(@"curl https://raw.githubusercontent.com/proxysu/shellscript/master/trojan-go.sh yes | bash");
             var success = FileExists("/usr/local/bin/trojan-go");
             if (success == false)

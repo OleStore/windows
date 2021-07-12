@@ -5,20 +5,12 @@ using ProxySuper.Core.Services;
 using ProxySuper.Core.ViewModels;
 using Renci.SshNet;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace ProxySuper.WPF.Views
 {
@@ -42,12 +34,20 @@ namespace ProxySuper.WPF.Views
 
         public NaiveProxyProject Project { get; set; }
 
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            _sshClient.Disconnect();
+            _sshClient.Dispose();
+        }
+
         private SshClient _sshClient;
         private void OpenConnect()
         {
 
             WriteOutput("正在登陆服务器 ...");
             var conneInfo = CreateConnectionInfo(ViewModel.Host);
+            conneInfo.Timeout = TimeSpan.FromSeconds(60);
             _sshClient = new SshClient(conneInfo);
             try
             {
@@ -71,6 +71,7 @@ namespace ProxySuper.WPF.Views
             {
                 outShell += "\n";
             }
+            ViewModel.CommandText += outShell;
 
             Dispatcher.Invoke(() =>
             {
@@ -119,8 +120,29 @@ namespace ProxySuper.WPF.Views
             {
                 Task.Factory.StartNew(OpenConnect);
             };
+            base.Closed += SaveInstallLog;
+            base.Closed += Disconnect;
         }
 
+        private void Disconnect(object sender, EventArgs e)
+        {
+            if (_sshClient != null)
+            {
+                _sshClient.Disconnect();
+                _sshClient.Dispose();
+            }
+        }
+
+        private void SaveInstallLog(object sender, EventArgs e)
+        {
+            if (!Directory.Exists("Logs"))
+            {
+                Directory.CreateDirectory("Logs");
+            }
+
+            var fileName = System.IO.Path.Combine("Logs", DateTime.Now.ToString("yyyy-MM-dd hh-mm") + ".naiveproxy.txt");
+            File.WriteAllText(fileName, ViewModel.CommandText);
+        }
 
         private void OpenLink(object sender, RoutedEventArgs e)
         {
